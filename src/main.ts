@@ -1,7 +1,6 @@
 import './assets/main.sass';
 import GameManager from './modules/GameManager';
 
-document.body.style.backgroundColor = '#000';
 const loading = document.createElement('div');
 loading.style.position = 'absolute';
 loading.style.top = '0';
@@ -18,6 +17,5 @@ document.body.appendChild(loading);
 
 setTimeout(() => {
   new GameManager();
-  document.body.style.backgroundColor = '#fff';
   document.body.removeChild(loading);
 }, 1500);
