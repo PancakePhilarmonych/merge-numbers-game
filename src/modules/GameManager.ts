@@ -22,13 +22,13 @@ export default class GameManager {
 
   constructor() {
     this.app = new App();
-    const instance = this.app.instance;
     this.store = new Store();
+    const instance = this.app.instance;
+    this.grid = new Grid(instance.view.width, instance.view.height);
+    const cellselectArea = this.grid.getContainers();
     this.container.eventMode = 'dynamic';
     this.container.sortableChildren = true;
     this.container.interactiveChildren = true;
-    this.grid = new Grid(5, instance.view.width, instance.view.height);
-    const cellselectArea = this.grid.getContainers();
     this.container.addChild(...cellselectArea);
 
     this.setListeners();

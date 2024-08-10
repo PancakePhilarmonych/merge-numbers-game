@@ -1,18 +1,19 @@
 import * as PIXI from 'pixi.js';
 import Cell from './Cell';
+const DEFAULT_GRID_SIZE = 5;
 
 export default class Grid {
   private cells: Cell[][];
   private selected: Cell | null = null;
   private cellSize: number;
 
-  constructor(objectCount: number, gameWidth: number, gameHeight: number) {
+  constructor(gameWidth: number, gameHeight: number) {
     this.cells = [];
-    const cellWidth = gameWidth / objectCount;
-    const cellHeight = gameHeight / objectCount;
+    const cellWidth = gameWidth / DEFAULT_GRID_SIZE;
+    const cellHeight = gameHeight / DEFAULT_GRID_SIZE;
     this.cellSize = cellWidth > cellHeight ? cellHeight : cellWidth;
 
-    this.initRows(objectCount);
+    this.initRows(DEFAULT_GRID_SIZE);
   }
 
   private initRows(rowsCount: number): void {
