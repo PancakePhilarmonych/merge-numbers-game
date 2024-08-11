@@ -17,21 +17,21 @@ export default class GameManager {
   private gameObjects: GameObject[] = [];
   private selectedObject: GameObject | null = null;
   private pause = false;
-  private container: PIXI.Container = new PIXI.Container();
+  private mainView: PIXI.Container = new PIXI.Container();
   private restartContainer: PIXI.Container = new PIXI.Container();
 
   constructor() {
     const instance = this.app.instance;
     const cellselectArea = this.grid.getContainers();
-    this.container.eventMode = 'dynamic';
-    this.container.sortableChildren = true;
-    this.container.interactiveChildren = true;
-    this.container.addChild(...cellselectArea);
+    this.mainView.eventMode = 'dynamic';
+    this.mainView.sortableChildren = true;
+    this.mainView.interactiveChildren = true;
+    this.mainView.addChild(...cellselectArea);
 
     this.setListeners();
 
     this.generateGameObjects();
-    instance.stage.addChild(this.container);
+    instance.stage.addChild(this.mainView);
     instance.stage.hitArea = instance.screen;
 
     this.createStartContainer();
@@ -39,7 +39,7 @@ export default class GameManager {
   }
 
   private setListeners(): void {
-    this.container.on('mg-select', (go: GameObject) => {
+    this.mainView.on('mg-select', (go: GameObject) => {
       if (this.selectedObject && this.selectedObject === go) {
         this.selectedObject = null;
         this.cleanSteps();
@@ -54,7 +54,7 @@ export default class GameManager {
       this.getAvailibleCellsAround(go);
     });
 
-    this.container.on<any>('deselect', () => {
+    this.mainView.on<any>('deselect', () => {
       if (!this.selectedObject) return;
       this.selectedObject = null;
     });
@@ -112,7 +112,7 @@ export default class GameManager {
   }
 
   private createStartContainer(): void {
-    this.container.eventMode = 'none';
+    this.mainView.eventMode = 'none';
     const startContainer = new PIXI.Container();
     startContainer.zIndex = 100;
     startContainer.width = this.app.instance.view.width;
@@ -162,7 +162,7 @@ export default class GameManager {
     startButton.on('pointerdown', () => {
       const instance = this.app.instance;
       this.app.instance.stage.removeChild(startContainer);
-      this.container.eventMode = 'dynamic';
+      this.mainView.eventMode = 'dynamic';
       instance.ticker.add(() => {
         const cells = this.grid.getCells();
 
@@ -186,13 +186,13 @@ export default class GameManager {
           if (this.selectedObject) {
             this.moveObjectToOwnCell(this.selectedObject);
             this.selectedObject.selection.alpha = 0;
-            this.container.removeAllListeners();
+            this.mainView.removeAllListeners();
             this.selectedObject = null;
           }
 
           setTimeout(() => {
             instance.ticker.stop();
-            this.container.eventMode = 'none';
+            this.mainView.eventMode = 'none';
           }, 500);
         }
 
@@ -257,7 +257,7 @@ export default class GameManager {
     const newGameObject = new GameObject(cell, color);
 
     this.gameObjects.push(newGameObject);
-    this.container.addChild(newGameObject);
+    this.mainView.addChild(newGameObject);
     cell.setGameObject(newGameObject);
 
     gsap.from(newGameObject, {
@@ -300,7 +300,7 @@ export default class GameManager {
       cell.setGameObject(newGameObject);
 
       this.gameObjects.push(newGameObject);
-      this.container.addChild(newGameObject);
+      this.mainView.addChild(newGameObject);
     });
 
     if (this.gameObjects.length < 16) {
@@ -448,7 +448,7 @@ export default class GameManager {
 
     this.store.reset();
     this.generateGameObjects();
-    this.container.eventMode = 'dynamic';
+    this.mainView.eventMode = 'dynamic';
     this.restartContainer.visible = false;
     this.pause = false;
     this.app.instance.ticker.start();
