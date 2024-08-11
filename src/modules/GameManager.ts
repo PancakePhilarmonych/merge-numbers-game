@@ -8,23 +8,20 @@ import { gsap } from 'gsap';
 import App from './App';
 
 export default class GameManager {
-  private app: App;
-  private store: Store;
-  private grid: Grid;
+  private app: App = new App();
+  private store: Store = new Store();
+  private grid = new Grid(this.app.instance.view.width, this.app.instance.view.height);
+
   private availibleCells: Cell[] = [];
   private availibleForMerge: GameObject[] = [];
   private gameObjects: GameObject[] = [];
-  private hoveredCell: Cell | null = null;
   private selectedObject: GameObject | null = null;
   private pause = false;
   private container: PIXI.Container = new PIXI.Container();
   private restartContainer: PIXI.Container = new PIXI.Container();
 
   constructor() {
-    this.app = new App();
-    this.store = new Store();
     const instance = this.app.instance;
-    this.grid = new Grid(instance.view.width, instance.view.height);
     const cellselectArea = this.grid.getContainers();
     this.container.eventMode = 'dynamic';
     this.container.sortableChildren = true;
@@ -440,7 +437,6 @@ export default class GameManager {
     });
 
     this.selectedObject = null;
-    this.hoveredCell = null;
 
     this.gameObjects = [];
     this.grid.getCells().forEach((cell: Cell) => {
@@ -448,7 +444,6 @@ export default class GameManager {
       cell.alpha = 1;
     });
 
-    this.hoveredCell = null;
     this.selectedObject = null;
 
     this.store.reset();
