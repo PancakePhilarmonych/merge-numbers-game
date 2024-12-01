@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import Cell from './Cell';
 import { Colors, getSpriteByColor } from '../utils';
 import SelectedCell from '../assets/sprites/blocks/selected.png';
+
 export class GameObject extends PIXI.Container {
   private color: Colors;
   private cell: Cell;

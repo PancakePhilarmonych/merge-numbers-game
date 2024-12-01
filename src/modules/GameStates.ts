@@ -14,61 +14,61 @@ export class GameStates {
     throw new Error('GameStates is a static class and cannot be instantiated');
   }
 
-  public static curentState: States = States.INITIALIZING;
+  public static currentState: States = States.INITIALIZING;
 
   public static isGameRunning(): boolean {
-    return GameStates.curentState === States.RUNNING;
+    return GameStates.currentState === States.RUNNING;
   }
 
   public static isGamePaused(): boolean {
-    return GameStates.curentState === States.PAUSED;
+    return GameStates.currentState === States.PAUSED;
   }
 
   public static isGameStopped(): boolean {
-    return GameStates.curentState === States.STOPPED;
+    return GameStates.currentState === States.STOPPED;
   }
 
   public static isGameInitializing(): boolean {
-    return GameStates.curentState === States.INITIALIZING;
+    return GameStates.currentState === States.INITIALIZING;
   }
 
   public static isGameResetting(): boolean {
-    return GameStates.curentState === States.RESETTING;
+    return GameStates.currentState === States.RESETTING;
   }
 
   public static isGameSaving(): boolean {
-    return GameStates.curentState === States.SAVING;
+    return GameStates.currentState === States.SAVING;
   }
 
   public static isGameLoading(): boolean {
-    return GameStates.curentState === States.LOADING;
+    return GameStates.currentState === States.LOADING;
   }
 
   public static setGameRunning(): void {
-    GameStates.curentState = States.RUNNING;
+    GameStates.currentState = States.RUNNING;
   }
 
   public static setGamePaused(): void {
-    GameStates.curentState = States.PAUSED;
+    GameStates.currentState = States.PAUSED;
   }
 
   public static setGameStopped(): void {
-    GameStates.curentState = States.STOPPED;
+    GameStates.currentState = States.STOPPED;
   }
 
   public static setGameInitializing(): void {
-    GameStates.curentState = States.INITIALIZING;
+    GameStates.currentState = States.INITIALIZING;
   }
 
   public static setGameResetting(): void {
-    GameStates.curentState = States.RESETTING;
+    GameStates.currentState = States.RESETTING;
   }
 
   public static setGameSaving(): void {
-    GameStates.curentState = States.SAVING;
+    GameStates.currentState = States.SAVING;
   }
 
   public static setGameLoading(): void {
-    GameStates.curentState = States.LOADING;
+    GameStates.currentState = States.LOADING;
   }
 }

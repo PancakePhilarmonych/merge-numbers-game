@@ -189,11 +189,6 @@ export default class GameManager {
             this.mainView.removeAllListeners();
             this.selectedObject = null;
           }
-
-          setTimeout(() => {
-            instance.ticker.stop();
-            this.mainView.eventMode = 'none';
-          }, 500);
         }
 
         if (!this.selectedObject) return;
@@ -346,8 +341,8 @@ export default class GameManager {
     // Ставим объект в текущую клетку
     cell.setGameObject(object);
     // Показываем спрайт выбора
-    gsap.to(object.selection, { alpha: 1, duration: 0.6 });
-    gsap.to(object.selection, { zIndex: 2, duration: 0.6 });
+    // gsap.to(object.selection, { alpha: 1, duration: 0.6 });
+    // gsap.to(object.selection, { zIndex: 2, duration: 0.6 });
     // Перемещаем объект в центр клетки
     smoothMoveTo(object, cellX, cellY, 0.5);
     // Присваиваем объекту новую клетку
@@ -363,6 +358,10 @@ export default class GameManager {
       this.addNewObject(randomEmptyCell, getRandomColor(true));
     }
     this.getAvailibleCellsAround(object);
+
+    this.selectedObject.selection.alpha = 0;
+    this.selectedObject = null;
+    this.cleanSteps();
   }
 
   moveObjectToOwnCell(object: GameObject): void {
@@ -376,6 +375,10 @@ export default class GameManager {
     object.selection.alpha = 0.9;
     object.selection.zIndex = 2;
     this.selectedObject = object;
+
+    this.selectedObject.selection.alpha = 0;
+    this.selectedObject = null;
+    this.cleanSteps();
   }
 
   moveObjectToMatchedCell(object: GameObject, cell: Cell): void {
@@ -408,6 +411,10 @@ export default class GameManager {
     }
 
     this.getAvailibleCellsAround(cellGameObject!);
+
+    this.selectedObject.selection.alpha = 0;
+    this.selectedObject = null;
+    this.cleanSteps();
   }
 
   private cleanSteps(): void {
@@ -430,7 +437,6 @@ export default class GameManager {
 
   public restartGame(): void {
     this.cleanSteps();
-    this.setListeners();
 
     this.gameObjects.forEach((gameObject: GameObject) => {
       gameObject.destroy();
@@ -450,6 +456,7 @@ export default class GameManager {
     this.generateGameObjects();
     this.mainView.eventMode = 'dynamic';
     this.restartContainer.visible = false;
+    this.setListeners();
     this.pause = false;
     this.app.instance.ticker.start();
   }

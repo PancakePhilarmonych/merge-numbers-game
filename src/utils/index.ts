@@ -4,27 +4,12 @@ import { gsap } from 'gsap';
 import red from '../assets/sprites/blocks/red.png';
 import yellow from '../assets/sprites/blocks/yellow.png';
 import blue from '../assets/sprites/blocks/blue.png';
-// import redOne from '../assets/sprites/blocks/red_one.png';
-// import redTwo from '../assets/sprites/blocks/red_two.png';
-// import redThree from '../assets/sprites/blocks/red_three.png';
-// import yellowOne from '../assets/sprites/blocks/yellow_one.png';
-// import yellowTwo from '../assets/sprites/blocks/yellow_two.png';
-// import yellowThree from '../assets/sprites/blocks/yellow_three.png';
-// import blueOne from '../assets/sprites/blocks/blue_one.png';
-// import blueTwo from '../assets/sprites/blocks/blue_two.png';
-// import blueThree from '../assets/sprites/blocks/blue_three.png';
 import empty from '../assets/sprites/blocks/empty.png';
 
 export enum Colors {
   RED = 'RED',
-  // RED_TWO = 'RED_TWO',
-  // RED_THREE = 'RED_THREE',
   YELLOW = 'YELLOW',
-  // YELLOW_TWO = 'YELLOW_TWO',
-  // YELLOW_THREE = 'YELLOW_THREE',
   BLUE = 'BLUE',
-  // BLUE_TWO = 'BLUE_TWO',
-  // BLUE_THREE = 'BLUE_THREE',
   EMPTY = 'EMPTY',
 }
 

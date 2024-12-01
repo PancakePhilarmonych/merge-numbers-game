@@ -16,6 +16,7 @@ export default class Grid {
     this.initRows(DEFAULT_GRID_SIZE);
   }
 
+  // Initialize the grid with cells
   private initRows(rowsCount: number): void {
     for (let row = 0; row < rowsCount; row++) {
       this.cells[row] = [];
@@ -27,18 +28,22 @@ export default class Grid {
     }
   }
 
+  // Get all cell containers
   getContainers(): PIXI.Container[] {
     return this.cells.map((row: Cell[]) => row.map((cell: Cell) => cell)).flat();
   }
 
+  // Get all cells
   getCells(): Cell[] {
     return this.cells.flat();
   }
 
+  // Get a specific cell by its coordinates
   public getCell(x: number, y: number): Cell | null {
     return this.cells?.[x]?.[y] ?? null;
   }
 
+  // Select a cell
   public select(cell: Cell): void {
     if (this.selected) {
       this.deselect();
@@ -47,16 +52,19 @@ export default class Grid {
     this.selected = cell;
   }
 
+  // Deselect the currently selected cell
   public deselect(): void {
     if (this.selected) {
       this.selected = null;
     }
   }
 
+  // Get the size of a cell
   getCellSize(): number {
     return this.cellSize;
   }
 
+  // Get the position of the selected cell
   getSelectedCellPosition(x: number, y: number): { x: number; y: number } {
     return {
       x: Math.floor(x / this.cells[x][y].position.x),
