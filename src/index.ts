@@ -15,7 +15,7 @@ loading.style.zIndex = '1000';
 loading.innerHTML = '<h1 style="color: #fff">Loading...</h1>';
 document.body.appendChild(loading);
 
-// Имитация загрузки с задержкой (можно убрать)
+// Имитация загрузки с задержкой (Лоадер ассетов)
 setTimeout(() => {
   new GameManager();
 

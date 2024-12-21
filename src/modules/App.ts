@@ -11,7 +11,8 @@ export default class App {
       backgroundAlpha: 0,
       autoDensity: true,
       view: document.getElementById('app') as HTMLCanvasElement,
+      width: size,
+      height: size,
     });
-    this.instance.renderer.resize(size, size);
   }
 }

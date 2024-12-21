@@ -459,7 +459,6 @@ export default class GameManager {
     this.generateGameObjects();
     this.mainView.eventMode = 'dynamic';
     this.restartContainer.visible = false;
-    this.setListeners();
     this.pause = false;
     this.app.instance.ticker.start();
   }
