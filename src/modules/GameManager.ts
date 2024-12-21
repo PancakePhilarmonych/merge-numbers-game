@@ -291,7 +291,6 @@ export default class GameManager {
 
       const newGameObject = new GameObject(cell, randomColor);
 
-      // newGameObject.setCell(cell);
       cell.setGameObject(newGameObject);
 
       this.gameObjects.push(newGameObject);
@@ -355,7 +354,9 @@ export default class GameManager {
     const randomEmptyCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
 
     if (randomEmptyCell) {
-      this.addNewObject(randomEmptyCell, getRandomColor(true));
+      setTimeout(() => {
+        this.addNewObject(randomEmptyCell, getRandomColor(true));
+      }, 500);
     }
     this.getAvailibleCellsAround(object);
 
@@ -407,7 +408,9 @@ export default class GameManager {
     const randomEmptyCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
 
     if (randomEmptyCell) {
-      this.addNewObject(randomEmptyCell, getRandomColor(true));
+      setTimeout(() => {
+        this.addNewObject(randomEmptyCell, getRandomColor(true));
+      }, 500);
     }
 
     this.getAvailibleCellsAround(cellGameObject!);
