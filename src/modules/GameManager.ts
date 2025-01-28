@@ -21,12 +21,7 @@ export default class GameManager {
   private restartContainer: PIXI.Container = new PIXI.Container();
 
   constructor() {
-    const cellselectArea = this.grid.getContainers();
-    this.mainView.eventMode = 'dynamic';
-    this.mainView.sortableChildren = true;
-    this.mainView.interactiveChildren = true;
-    this.mainView.addChild(...cellselectArea);
-
+    this.setMainContainer();
     this.setListeners();
 
     this.generateGameObjects();
@@ -35,6 +30,14 @@ export default class GameManager {
 
     this.createStartContainer();
     this.createRestartContainer();
+  }
+
+  private setMainContainer(): void {
+    const cellselectArea = this.grid.getContainers();
+    this.mainView.eventMode = 'dynamic';
+    this.mainView.sortableChildren = true;
+    this.mainView.interactiveChildren = true;
+    this.mainView.addChild(...cellselectArea);
   }
 
   private setListeners(): void {
