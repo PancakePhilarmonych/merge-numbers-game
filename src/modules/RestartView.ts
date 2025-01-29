@@ -10,11 +10,22 @@ export default class RestartView extends PIXI.Container {
     this.container.width = width;
     this.container.height = height;
 
+    this.container.addChild(this.createPauseBackground(width, height));
+    this.container.addChild(this.createRestartButton(width, height));
+    this.container.addChild(this.createRestartText());
+    this.container.visible = false;
+  }
+
+  private createPauseBackground(width: number, height: number) {
     const pauseBackground = new PIXI.Graphics();
     pauseBackground.beginFill(0xff7675, 0.9);
     pauseBackground.drawRect(0, 0, width, height);
     pauseBackground.endFill();
 
+    return pauseBackground;
+  }
+
+  private createRestartButton(width: number, height: number) {
     const restartButton = new PIXI.Graphics();
     restartButton.beginFill(0xffffff, 1);
     restartButton.drawRoundedRect(0, 0, width / 2, height / 6, 5);
@@ -25,22 +36,23 @@ export default class RestartView extends PIXI.Container {
     restartButton.eventMode = 'dynamic';
     restartButton.cursor = 'pointer';
 
+    restartButton.on('pointerdown', () => this.container.emit('mg-restart', this));
+
+    return restartButton;
+  }
+
+  private createRestartText() {
     const restartText = new PIXI.Text('Restart', {
       fill: 0x000000,
-      fontSize: restartButton.height / 2,
+      fontSize: 50,
       fontFamily: 'Titan One',
       align: 'center',
     });
+
     restartText.zIndex = 102;
-
-    restartText.x = restartButton.x + restartButton.width / 2 - restartText.width / 2;
-    restartText.y = restartButton.y + restartButton.height / 2 - restartText.height / 2;
-
-    this.container.addChild(pauseBackground);
-    this.container.addChild(restartButton);
-    this.container.addChild(restartText);
-    this.container.visible = false;
-
-    restartButton.on('pointerdown', () => this.container.emit('mg-restart', this));
+    restartText.anchor.set(0.5);
+    restartText.x = this.container.width / 2;
+    restartText.y = this.container.height / 2;
+    return restartText;
   }
 }
