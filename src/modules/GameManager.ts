@@ -127,27 +127,42 @@ export default class GameManager {
     startBackground.drawRect(0, 0, this.app.instance.view.width, this.app.instance.view.height);
     startBackground.endFill();
 
-    const startButton = new PIXI.Graphics();
-    startButton.beginFill(0xffffff, 1);
-    startButton.drawRoundedRect(
-      0,
-      0,
-      this.app.instance.view.width / 2,
-      this.app.instance.view.height / 6,
-      5,
-    );
-    startButton.endFill();
+    const buttonWidth = this.app.instance.view.width / 2;
+    const buttonHeight = this.app.instance.view.height / 6;
+    const radius = 15;
+
+    const startButton = new PIXI.Container();
+
+    const shadow = new PIXI.Graphics();
+    shadow.beginFill(0x000000, 0.3);
+    shadow.drawRoundedRect(5, 5, buttonWidth, buttonHeight, radius);
+    shadow.endFill();
+    startButton.addChild(shadow);
+
+    const buttonBackground = new PIXI.Graphics();
+    buttonBackground.beginFill(0x2c3e50);
+    buttonBackground.drawRoundedRect(0, 0, buttonWidth, buttonHeight, radius);
+    buttonBackground.endFill();
+
+    const gradientOverlay = new PIXI.Graphics();
+    gradientOverlay.beginFill(0x34495e);
+    gradientOverlay.drawRoundedRect(0, 0, buttonWidth, buttonHeight / 2, radius);
+    gradientOverlay.endFill();
+    gradientOverlay.alpha = 0.5;
+
+    startButton.addChild(buttonBackground);
+    startButton.addChild(gradientOverlay);
+
     startButton.zIndex = 101;
-    // startButton.lineStyle(2, 0xffffff);
     startButton.x = this.app.instance.view.width / 2 - startButton.width / 2;
     startButton.y = this.app.instance.view.height / 2 - startButton.height / 2;
     startButton.eventMode = 'dynamic';
     startButton.cursor = 'pointer';
 
     const startText = new PIXI.Text('Start', {
-      fill: 0x000000,
-      fontSize: startButton.height / 2,
-      fontWeight: 'bold',
+      fill: 0xffffff,
+      fontSize: 50,
+      fontWeight: 'normal',
       fontFamily: 'Titan One',
       align: 'center',
     });
@@ -170,21 +185,13 @@ export default class GameManager {
         const cells = this.grid.getCells();
 
         if (cells.every((cell: Cell) => cell.getGameObject() !== null)) {
-          this.restartView.container.visible = true;
           this.pause = true;
-
-          const scoreText = new PIXI.Text(`Score: ${this.store.getScore()}`, {
-            fill: 0xffffff,
-            fontSize: 40,
-            fontFamily: 'Titan One',
-            align: 'center',
-          });
-
-          scoreText.x = this.app.instance.view.width / 2 - scoreText.width / 2;
-          scoreText.y = this.app.instance.view.height / 2 - scoreText.height / 2 - 100;
-
-          this.restartView.container.removeChild(this.restartView.container.children[3]);
-          this.restartView.container.addChild(scoreText);
+          this.restartView.show();
+          this.restartView.setScoreText(
+            this.app.instance.view.width,
+            this.app.instance.view.height,
+            this.store.getScore(),
+          );
 
           if (this.selectedObject) {
             this.moveObjectToOwnCell(this.selectedObject);
@@ -412,7 +419,7 @@ export default class GameManager {
     this.store.reset();
     this.generateGameObjects();
     this.app.container.eventMode = 'dynamic';
-    this.restartView.container.visible = false;
+    this.restartView.hide();
     this.pause = false;
     this.app.instance.ticker.start();
   }
