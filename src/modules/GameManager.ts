@@ -133,25 +133,18 @@ export default class GameManager {
 
     const startButton = new PIXI.Container();
 
-    const shadow = new PIXI.Graphics();
-    shadow.beginFill(0x000000, 0.3);
-    shadow.drawRoundedRect(5, 5, buttonWidth, buttonHeight, radius);
-    shadow.endFill();
-    startButton.addChild(shadow);
+    const border = new PIXI.Graphics()
+      .lineStyle(6, 0xffffff, 1)
+      .drawRoundedRect(-3, -3, buttonWidth + 6, buttonHeight + 6, radius);
+
+    startButton.addChild(border);
 
     const buttonBackground = new PIXI.Graphics();
     buttonBackground.beginFill(0x2c3e50);
     buttonBackground.drawRoundedRect(0, 0, buttonWidth, buttonHeight, radius);
     buttonBackground.endFill();
 
-    const gradientOverlay = new PIXI.Graphics();
-    gradientOverlay.beginFill(0x34495e);
-    gradientOverlay.drawRoundedRect(0, 0, buttonWidth, buttonHeight / 2, radius);
-    gradientOverlay.endFill();
-    gradientOverlay.alpha = 0.5;
-
     startButton.addChild(buttonBackground);
-    startButton.addChild(gradientOverlay);
 
     startButton.zIndex = 101;
     startButton.x = this.app.instance.view.width / 2 - startButton.width / 2;

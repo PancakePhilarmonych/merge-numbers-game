@@ -32,25 +32,18 @@ export default class RestartView extends PIXI.Container {
 
     const restartButton = new PIXI.Container();
 
-    const shadow = new PIXI.Graphics();
-    shadow.beginFill(0x000000, 0.3);
-    shadow.drawRoundedRect(5, 5, buttonWidth, buttonHeight, radius);
-    shadow.endFill();
-    restartButton.addChild(shadow);
+    const border = new PIXI.Graphics()
+      .lineStyle(6, 0xffffff, 1)
+      .drawRoundedRect(-3, -3, buttonWidth + 6, buttonHeight + 6, radius);
+
+    restartButton.addChild(border);
 
     const buttonBackground = new PIXI.Graphics();
     buttonBackground.beginFill(0x2c3e50);
     buttonBackground.drawRoundedRect(0, 0, buttonWidth, buttonHeight, radius);
     buttonBackground.endFill();
 
-    const gradientOverlay = new PIXI.Graphics();
-    gradientOverlay.beginFill(0x34495e);
-    gradientOverlay.drawRoundedRect(0, 0, buttonWidth, buttonHeight / 2, radius);
-    gradientOverlay.endFill();
-    gradientOverlay.alpha = 0.5;
-
     restartButton.addChild(buttonBackground);
-    restartButton.addChild(gradientOverlay);
 
     restartButton.x = width / 2 - buttonWidth / 2;
     restartButton.y = height / 2 - buttonHeight / 2;
@@ -83,7 +76,7 @@ export default class RestartView extends PIXI.Container {
   private createScoreText(width: number, height: number, score: number) {
     const scoreText = new PIXI.Text(`Score: ${score}`, {
       fill: 0xffffff,
-      fontSize: 40,
+      fontSize: 50,
       fontFamily: 'Titan One',
       align: 'center',
     });

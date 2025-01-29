@@ -12,6 +12,7 @@ loading.style.display = 'flex';
 loading.style.justifyContent = 'center';
 loading.style.alignItems = 'center';
 loading.style.zIndex = '1000';
+loading.style.fontSize = '18px';
 loading.innerHTML = '<h1 style="color: #fff">Loading...</h1>';
 document.body.appendChild(loading);
 
