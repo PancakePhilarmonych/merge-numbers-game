@@ -134,13 +134,13 @@ export default class GameManager {
     const startButton = new PIXI.Container();
 
     const border = new PIXI.Graphics()
-      .lineStyle(6, 0xffffff, 1)
+      .lineStyle(10, 0xffffff, 1)
       .drawRoundedRect(-3, -3, buttonWidth + 6, buttonHeight + 6, radius);
 
     startButton.addChild(border);
 
     const buttonBackground = new PIXI.Graphics();
-    buttonBackground.beginFill(0x2c3e50);
+    buttonBackground.beginFill(0xf5cd79);
     buttonBackground.drawRoundedRect(0, 0, buttonWidth, buttonHeight, radius);
     buttonBackground.endFill();
 
