@@ -4,6 +4,7 @@ import Store from './Store';
 import * as PIXI from 'pixi.js';
 import Cell from './Cell';
 import { Colors, smoothMoveTo, getRandomColor } from '../utils';
+import RestartView from './RestartView';
 import { gsap } from 'gsap';
 import App from './App';
 
@@ -17,7 +18,7 @@ export default class GameManager {
   private gameObjects: GameObject[] = [];
   private selectedObject: GameObject | null = null;
   private pause = false;
-  private restartContainer: PIXI.Container = new PIXI.Container();
+  private restartView: RestartView;
 
   constructor() {
     this.setMainContainer();
@@ -28,7 +29,9 @@ export default class GameManager {
     this.app.instance.stage.hitArea = this.app.instance.screen;
 
     this.createStartContainer();
-    this.createRestartContainer();
+    this.restartView = new RestartView(this.app.instance.view.width, this.app.instance.view.height);
+    this.restartView.container.on('mg-restart', () => this.restartGame());
+    this.app.instance.stage.addChild(this.restartView.container);
   }
 
   private setMainContainer(): void {
@@ -167,7 +170,7 @@ export default class GameManager {
         const cells = this.grid.getCells();
 
         if (cells.every((cell: Cell) => cell.getGameObject() !== null)) {
-          this.restartContainer.visible = true;
+          this.restartView.container.visible = true;
           this.pause = true;
 
           const scoreText = new PIXI.Text(`Score: ${this.store.getScore()}`, {
@@ -180,8 +183,8 @@ export default class GameManager {
           scoreText.x = this.app.instance.view.width / 2 - scoreText.width / 2;
           scoreText.y = this.app.instance.view.height / 2 - scoreText.height / 2 - 100;
 
-          this.restartContainer.removeChild(this.restartContainer.children[3]);
-          this.restartContainer.addChild(scoreText);
+          this.restartView.container.removeChild(this.restartView.container.children[3]);
+          this.restartView.container.addChild(scoreText);
 
           if (this.selectedObject) {
             this.moveObjectToOwnCell(this.selectedObject);
@@ -197,55 +200,6 @@ export default class GameManager {
         this.selectedObject.selection.zIndex = 2;
       });
     });
-  }
-
-  private createRestartContainer(): void {
-    this.restartContainer = new PIXI.Container();
-    this.restartContainer.zIndex = 100;
-    this.restartContainer.width = this.app.instance.view.width;
-    this.restartContainer.height = this.app.instance.view.height;
-
-    const pauseBackground = new PIXI.Graphics();
-    pauseBackground.beginFill(0xff7675, 0.9);
-    pauseBackground.drawRect(0, 0, this.app.instance.view.width, this.app.instance.view.height);
-    pauseBackground.endFill();
-
-    const restartButton = new PIXI.Graphics();
-    restartButton.beginFill(0xffffff, 1);
-    restartButton.drawRoundedRect(
-      0,
-      0,
-      this.app.instance.view.width / 2,
-      this.app.instance.view.height / 6,
-      5,
-    );
-    restartButton.endFill();
-    restartButton.zIndex = 101;
-    // restartButton.lineStyle(2, 0xffffff);
-    restartButton.x = this.app.instance.view.width / 2 - restartButton.width / 2;
-    restartButton.y = this.app.instance.view.height / 2 - restartButton.height / 2;
-    restartButton.eventMode = 'dynamic';
-    restartButton.cursor = 'pointer';
-
-    const restartText = new PIXI.Text('Restart', {
-      fill: 0x000000,
-      fontSize: restartButton.height / 2,
-      fontFamily: 'Titan One',
-      align: 'center',
-    });
-    restartText.zIndex = 102;
-
-    restartText.x = restartButton.x + restartButton.width / 2 - restartText.width / 2;
-    restartText.y = restartButton.y + restartButton.height / 2 - restartText.height / 2;
-
-    this.restartContainer.addChild(pauseBackground);
-    this.restartContainer.addChild(restartButton);
-    this.restartContainer.addChild(restartText);
-    this.restartContainer.visible = false;
-
-    this.app.instance.stage.addChild(this.restartContainer);
-
-    restartButton.on('pointerdown', () => this.restartGame());
   }
 
   private addNewObject(cell: Cell, color: Colors): void {
@@ -458,7 +412,7 @@ export default class GameManager {
     this.store.reset();
     this.generateGameObjects();
     this.app.container.eventMode = 'dynamic';
-    this.restartContainer.visible = false;
+    this.restartView.container.visible = false;
     this.pause = false;
     this.app.instance.ticker.start();
   }
