@@ -232,7 +232,7 @@ export default class GameManager {
     this.selectedObject.destroy();
     const gameObjectIndex = this.gameObjects.indexOf(this.selectedObject);
     this.gameObjects.splice(gameObjectIndex, 1);
-    this.selectedObject.getCell()!.removeGameObject();
+    this.selectedObject.getCell().removeGameObject();
     this.selectedObject = null;
   }
 
@@ -290,21 +290,12 @@ export default class GameManager {
       return;
     }
 
-    // Hide
     object.selection.alpha = 0;
     object.selection.zIndex = 1;
-    // Удаляем объект из клетки
     object.getCell()!.removeGameObject();
-    // Ставим объект в текущую клетку
     cell.setGameObject(object);
-    // Показываем спрайт выбора
-    // gsap.to(object.selection, { alpha: 1, duration: 0.6 });
-    // gsap.to(object.selection, { zIndex: 2, duration: 0.6 });
-    // Перемещаем объект в центр клетки
     smoothMoveTo(object, cellX, cellY, 0.5);
-    // Присваиваем объекту новую клетку
     object.setCell(cell);
-    // Выбираем объект
     this.selectedObject = object;
 
     this.cleanSteps();
@@ -340,22 +331,24 @@ export default class GameManager {
   }
 
   moveObjectToMatchedCell(object: GameObject, cell: Cell): void {
-    const cellGameObject = cell.getGameObject();
+    const cellGameObject = cell.getGameObject() || null;
+    if (!cellGameObject) return;
+
     const cellSize = this.grid.cellSize;
     const cellX = cellSize * cell.x + cellSize / 2;
     const cellY = cellSize * cell.y + cellSize / 2;
 
-    cellGameObject!.x = object.x;
-    cellGameObject!.y = object.y;
+    cellGameObject.x = object.x;
+    cellGameObject.y = object.y;
     smoothMoveTo(cellGameObject!, cellX, cellY, 0.5);
-    cellGameObject!.selection.alpha = 0.9;
-    cellGameObject!.selection.zIndex = 2;
+    cellGameObject.selection.alpha = 0.9;
+    cellGameObject.selection.zIndex = 2;
 
     object.destroy();
-    object.getCell()!.removeGameObject();
+    object.getCell().removeGameObject();
     object.selection.alpha = 0;
-    this.levelUpObject(cellGameObject!);
-    this.selectedObject = cellGameObject!;
+    this.levelUpObject(cellGameObject);
+    this.selectedObject = cellGameObject;
     const gameObjectIndex = this.gameObjects.indexOf(object);
     this.gameObjects.splice(gameObjectIndex, 1);
 
