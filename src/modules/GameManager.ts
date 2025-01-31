@@ -67,7 +67,7 @@ export default class GameManager {
   private getAvailibleCellsAround(gameObject: GameObject): void {
     this.cleanSteps();
 
-    const cells = this.grid.getCells();
+    const cells = this.grid.flatCells;
     const gameObjectCell = gameObject.getCell();
     const gameObjectX = gameObjectCell!.x;
     const gameObjectY = gameObjectCell!.y;
@@ -175,7 +175,7 @@ export default class GameManager {
       this.app.instance.stage.removeChild(startContainer);
       this.app.container.eventMode = 'dynamic';
       this.app.instance.ticker.add(() => {
-        const cells = this.grid.getCells();
+        const cells = this.grid.flatCells;
 
         if (cells.every((cell: Cell) => cell.getGameObject() !== null)) {
           this.pause = true;
@@ -237,7 +237,7 @@ export default class GameManager {
   }
 
   private generateGameObjects(): void {
-    const gridCells = this.grid.getCells();
+    const gridCells = this.grid.flatCells;
     gridCells.forEach((cell: Cell) => {
       const hasGameObject = cell.getGameObject();
 
@@ -262,7 +262,7 @@ export default class GameManager {
 
   private setObjectToCell(object: GameObject, cell: Cell): void {
     const cellGameObject = cell.getGameObject();
-    const cellSize = this.grid.getCellSize();
+    const cellSize = this.grid.cellSize;
     const cellX = cellSize * cell.x + cellSize / 2;
     const cellY = cellSize * cell.y + cellSize / 2;
 
@@ -308,8 +308,7 @@ export default class GameManager {
     this.selectedObject = object;
 
     this.cleanSteps();
-    const emptyCells = this.grid.getCells().filter((cell: Cell) => !cell.getGameObject());
-    const randomEmptyCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    const randomEmptyCell = this.grid.getRandomEmptyCell();
 
     if (randomEmptyCell) {
       setTimeout(() => {
@@ -324,7 +323,7 @@ export default class GameManager {
   }
 
   moveObjectToOwnCell(object: GameObject): void {
-    const cellSize = this.grid.getCellSize();
+    const cellSize = this.grid.cellSize;
     const objectCell = object.getCell()!;
 
     const objectCellX = cellSize * objectCell.x + cellSize / 2;
@@ -342,7 +341,7 @@ export default class GameManager {
 
   moveObjectToMatchedCell(object: GameObject, cell: Cell): void {
     const cellGameObject = cell.getGameObject();
-    const cellSize = this.grid.getCellSize();
+    const cellSize = this.grid.cellSize;
     const cellX = cellSize * cell.x + cellSize / 2;
     const cellY = cellSize * cell.y + cellSize / 2;
 
@@ -362,8 +361,7 @@ export default class GameManager {
 
     this.cleanSteps();
 
-    const emptyCells = this.grid.getCells().filter((cell: Cell) => !cell.getGameObject());
-    const randomEmptyCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    const randomEmptyCell = this.grid.getRandomEmptyCell();
 
     if (randomEmptyCell) {
       setTimeout(() => {
@@ -406,10 +404,7 @@ export default class GameManager {
     this.selectedObject = null;
 
     this.gameObjects = [];
-    this.grid.getCells().forEach((cell: Cell) => {
-      cell.removeGameObject();
-      cell.alpha = 1;
-    });
+    this.grid.cleanAllCells();
 
     this.selectedObject = null;
 

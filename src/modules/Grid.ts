@@ -5,7 +5,7 @@ const DEFAULT_GRID_SIZE = 5;
 export default class Grid {
   private cells: Cell[][];
   private selected: Cell | null = null;
-  private cellSize: number;
+  public cellSize: number;
 
   constructor(gameWidth: number, gameHeight: number) {
     this.cells = [];
@@ -31,10 +31,6 @@ export default class Grid {
     return this.cells.map((row: Cell[]) => row.map((cell: Cell) => cell)).flat();
   }
 
-  getCells(): Cell[] {
-    return this.cells.flat();
-  }
-
   public getCell(x: number, y: number): Cell | null {
     return this.cells?.[x]?.[y] ?? null;
   }
@@ -53,14 +49,31 @@ export default class Grid {
     }
   }
 
-  getCellSize(): number {
-    return this.cellSize;
-  }
-
   getSelectedCellPosition(x: number, y: number): { x: number; y: number } {
     return {
       x: Math.floor(x / this.cells[x][y].position.x),
       y: Math.floor(y / this.cells[x][y].position.y),
     };
+  }
+
+  cleanAllCells(): void {
+    this.cells.forEach(row =>
+      row.forEach(cell => {
+        cell.removeGameObject();
+        cell.alpha = 1;
+      }),
+    );
+  }
+
+  getRandomEmptyCell(): Cell {
+    return this.emptyCells[Math.floor(Math.random() * this.emptyCells.length)];
+  }
+
+  get flatCells(): Cell[] {
+    return this.cells.flat();
+  }
+
+  get emptyCells(): Cell[] {
+    return this.flatCells.filter(cell => cell.getGameObject() === null);
   }
 }
