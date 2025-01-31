@@ -239,6 +239,10 @@ export default class GameManager {
   private generateGameObjects(): void {
     const gridCells = this.grid.getCells();
     gridCells.forEach((cell: Cell) => {
+      const hasGameObject = cell.getGameObject();
+
+      if (hasGameObject) return;
+
       const randomColor = getRandomColor();
 
       if (randomColor === Colors.EMPTY) return;
