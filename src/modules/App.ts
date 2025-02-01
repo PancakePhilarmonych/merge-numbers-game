@@ -11,14 +11,10 @@ export default class App {
       antialias: true,
       backgroundAlpha: 0,
       autoDensity: true,
-      // resolution: window.devicePixelRatio || 1,
+      resolution: window.devicePixelRatio || 1,
       view: document.getElementById('app') as HTMLCanvasElement,
       width: size,
       height: size,
     });
-
-    window.addEventListener('resize', () => {
-      this.instance.renderer.resize(window.innerWidth, window.innerHeight);
-  });
   }
 }

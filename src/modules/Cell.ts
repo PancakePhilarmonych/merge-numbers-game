@@ -73,4 +73,18 @@ export default class Cell extends PIXI.Container {
   removeGameObject() {
     this.gameObject = null;
   }
+
+  public updateSize(size: number) {
+    this.sprite.width = size;
+    this.sprite.height = size;
+    this.sprite.x = size * this.column;
+    this.sprite.y = size * this.row;
+
+    this.availibleArea.width = size;
+    this.availibleArea.height = size;
+    this.availibleArea.x = size * this.column;
+    this.availibleArea.y = size * this.row;
+
+    this.gameObject?.updateSize(size);
+  }
 }

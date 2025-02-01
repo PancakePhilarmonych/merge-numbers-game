@@ -76,4 +76,22 @@ export default class Grid {
   get emptyCells(): Cell[] {
     return this.flatCells.filter(cell => cell.getGameObject() === null);
   }
+
+  get isFull(): boolean {
+    return this.flatCells.every((cell: Cell) => cell.getGameObject() !== null);
+  }
+
+  public updateSize(newWidth: number, newHeight: number) {
+    const cellWidth = newWidth / DEFAULT_GRID_SIZE;
+    const cellHeight = newHeight / DEFAULT_GRID_SIZE;
+
+    this.cellSize = Math.min(cellWidth, cellHeight);
+
+    for (let row = 0; row < DEFAULT_GRID_SIZE; row++) {
+      for (let col = 0; col < DEFAULT_GRID_SIZE; col++) {
+        const cell = this.cells[row][col];
+        cell.updateSize(this.cellSize);
+      }
+    }
+  }
 }

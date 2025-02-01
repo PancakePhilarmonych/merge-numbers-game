@@ -100,4 +100,6 @@ export default class RestartView extends PIXI.Container {
   public hide() {
     this.container.visible = false;
   }
+
+  public resize(): void {}
 }
