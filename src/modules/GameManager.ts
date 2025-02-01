@@ -1,17 +1,17 @@
 import { GameObject } from './GameObject';
 import Grid from './Grid';
 import Store from './Store';
-import * as PIXI from 'pixi.js';
 import Cell from './Cell';
-import { Colors, smoothMoveTo, getRandomColor } from '../utils';
+import { Colors, smoothMoveTo, getRandomColor, getMaxAvailibleSideSize } from '../utils';
 import RestartView from './RestartView';
+import StartView from './StartView';
 import { gsap } from 'gsap';
 import App from './App';
 
 export default class GameManager {
   private app: App = new App();
   private store: Store = new Store();
-  private grid = new Grid(this.app.instance.view.width, this.app.instance.view.height);
+  private grid = new Grid(getMaxAvailibleSideSize(), getMaxAvailibleSideSize());
 
   private availibleCells: Cell[] = [];
   private availibleForMerge: GameObject[] = [];
@@ -19,8 +19,10 @@ export default class GameManager {
   private selectedObject: GameObject | null = null;
   private pause = false;
   private restartView: RestartView;
+  private startView: StartView;
 
   constructor() {
+    const size = getMaxAvailibleSideSize();
     this.setMainContainer();
     this.setListeners();
 
@@ -28,10 +30,28 @@ export default class GameManager {
     this.app.instance.stage.addChild(this.app.container);
     this.app.instance.stage.hitArea = this.app.instance.screen;
 
-    this.createStartContainer();
-    this.restartView = new RestartView(this.app.instance.view.width, this.app.instance.view.height);
+    this.restartView = new RestartView(size, size);
+    this.startView = new StartView(size, size);
+    this.startView.show();
     this.restartView.container.on('mg-restart', () => this.restartGame());
+    this.startView.container.on('mg-start', () => {
+      this.startView.hide();
+      this.startGame();
+    });
+
+    this.app.instance.stage.addChild(this.startView.container);
     this.app.instance.stage.addChild(this.restartView.container);
+
+    window.addEventListener('resize', () => this.resizeGrid());
+  }
+
+  private resizeGrid() {
+    const newSize = getMaxAvailibleSideSize();
+
+    this.app.instance.renderer.resize(newSize, newSize);
+    this.grid.updateSize(newSize, newSize);
+    this.startView.resize();
+    this.restartView.resize();
   }
 
   private setMainContainer(): void {
@@ -39,6 +59,7 @@ export default class GameManager {
     this.app.container.eventMode = 'dynamic';
     this.app.container.sortableChildren = true;
     this.app.container.interactiveChildren = true;
+    this.app.container.eventMode = 'none';
     this.app.container.addChild(...cellselectArea);
   }
 
@@ -111,93 +132,6 @@ export default class GameManager {
       cell.cursor = 'pointer';
       cell.on('pointerdown', () => {
         this.setObjectToCell(gameObject, cell);
-      });
-    });
-  }
-
-  private createStartContainer(): void {
-    this.app.container.eventMode = 'none';
-    const startContainer = new PIXI.Container();
-    startContainer.zIndex = 100;
-    startContainer.width = this.app.instance.view.width;
-    startContainer.height = this.app.instance.view.height;
-
-    const startBackground = new PIXI.Graphics();
-    startBackground.beginFill(0x2ecc71, 0.9);
-    startBackground.drawRect(0, 0, this.app.instance.view.width, this.app.instance.view.height);
-    startBackground.endFill();
-
-    const buttonWidth = this.app.instance.view.width / 2;
-    const buttonHeight = this.app.instance.view.height / 6;
-    const radius = 15;
-
-    const startButton = new PIXI.Container();
-
-    const border = new PIXI.Graphics()
-      .lineStyle(10, 0xffffff, 1)
-      .drawRoundedRect(-3, -3, buttonWidth + 6, buttonHeight + 6, radius);
-
-    startButton.addChild(border);
-
-    const buttonBackground = new PIXI.Graphics();
-    buttonBackground.beginFill(0xf5cd79);
-    buttonBackground.drawRoundedRect(0, 0, buttonWidth, buttonHeight, radius);
-    buttonBackground.endFill();
-
-    startButton.addChild(buttonBackground);
-
-    startButton.zIndex = 101;
-    startButton.x = this.app.instance.view.width / 2 - startButton.width / 2;
-    startButton.y = this.app.instance.view.height / 2 - startButton.height / 2;
-    startButton.eventMode = 'dynamic';
-    startButton.cursor = 'pointer';
-
-    const startText = new PIXI.Text('Start', {
-      fill: 0xffffff,
-      fontSize: 50,
-      fontWeight: 'normal',
-      fontFamily: 'Titan One',
-      align: 'center',
-    });
-    startText.zIndex = 102;
-
-    startText.x = startButton.x + startButton.width / 2 - startText.width / 2;
-    startText.y = startButton.y + startButton.height / 2 - startText.height / 2;
-
-    startContainer.addChild(startBackground);
-    startContainer.addChild(startButton);
-    startContainer.addChild(startText);
-    startContainer.visible = true;
-
-    this.app.instance.stage.addChild(startContainer);
-
-    startButton.on('pointerdown', () => {
-      this.app.instance.stage.removeChild(startContainer);
-      this.app.container.eventMode = 'dynamic';
-      this.app.instance.ticker.add(() => {
-        const cells = this.grid.flatCells;
-
-        if (cells.every((cell: Cell) => cell.getGameObject() !== null)) {
-          this.pause = true;
-          this.restartView.show();
-          this.restartView.setScoreText(
-            this.app.instance.view.width,
-            this.app.instance.view.height,
-            this.store.getScore(),
-          );
-
-          if (this.selectedObject) {
-            this.moveObjectToOwnCell(this.selectedObject);
-            this.selectedObject.selection.alpha = 0;
-            this.app.container.removeAllListeners();
-            this.selectedObject = null;
-          }
-        }
-
-        if (!this.selectedObject) return;
-
-        this.selectedObject.selection.alpha = 0.9;
-        this.selectedObject.selection.zIndex = 2;
       });
     });
   }
@@ -412,5 +346,32 @@ export default class GameManager {
   private levelUpObject(object: GameObject): void {
     object.levelUp();
     this.store.incrementScore(object.getLevel());
+  }
+
+  private startGame(): void {
+    this.app.container.eventMode = 'dynamic';
+    this.app.instance.ticker.add(() => {
+      if (this.grid.isFull) {
+        this.pause = true;
+        this.restartView.show();
+        this.restartView.setScoreText(
+          this.app.instance.view.width,
+          this.app.instance.view.height,
+          this.store.getScore(),
+        );
+
+        if (this.selectedObject) {
+          this.moveObjectToOwnCell(this.selectedObject);
+          this.selectedObject.selection.alpha = 0;
+          this.app.container.removeAllListeners();
+          this.selectedObject = null;
+        }
+      }
+
+      if (!this.selectedObject) return;
+
+      this.selectedObject.selection.alpha = 0.9;
+      this.selectedObject.selection.zIndex = 2;
+    });
   }
 }
