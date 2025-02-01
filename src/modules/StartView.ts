@@ -29,8 +29,8 @@ export default class StartView {
     const startButton = new PIXI.Container();
 
     const border = new PIXI.Graphics()
-      .lineStyle(6, 0xffffff, 1)
-      .drawRoundedRect(0, 0, buttonWidth, buttonHeight, radius);
+      .lineStyle(10, 0xffffff, 1)
+      .drawRoundedRect(-3, -3, buttonWidth + 6, buttonHeight + 6, radius);
 
     const buttonBackground = new PIXI.Graphics()
       .beginFill(0xf5cd79)
