@@ -3,31 +3,31 @@ import * as PIXI from 'pixi.js';
 export default class RestartView extends PIXI.Container {
   public container: PIXI.Container;
 
-  constructor(width: number, height: number) {
+  constructor(size: number) {
     super();
     this.container = new PIXI.Container();
     this.container.zIndex = 100;
-    this.container.width = width;
-    this.container.height = height;
+    this.container.width = size;
+    this.container.height = size;
 
-    this.container.addChild(this.createPauseBackground(width, height));
-    this.container.addChild(this.createRestartButton(width, height));
+    this.container.addChild(this.createPauseBackground(size));
+    this.container.addChild(this.createRestartButton(size));
     this.container.addChild(this.createRestartText());
     this.container.visible = false;
   }
 
-  private createPauseBackground(width: number, height: number) {
+  private createPauseBackground(size: number) {
     const pauseBackground = new PIXI.Graphics();
     pauseBackground.beginFill(0xff7675, 0.9);
-    pauseBackground.drawRect(0, 0, width, height);
+    pauseBackground.drawRect(0, 0, size, size);
     pauseBackground.endFill();
 
     return pauseBackground;
   }
 
-  private createRestartButton(width: number, height: number) {
-    const buttonWidth = width / 2;
-    const buttonHeight = height / 6;
+  private createRestartButton(size: number) {
+    const buttonWidth = size / 2;
+    const buttonHeight = size / 6;
     const radius = 15;
 
     const restartButton = new PIXI.Container();
@@ -45,8 +45,8 @@ export default class RestartView extends PIXI.Container {
 
     restartButton.addChild(buttonBackground);
 
-    restartButton.x = width / 2 - buttonWidth / 2;
-    restartButton.y = height / 2 - buttonHeight / 2;
+    restartButton.x = size / 2 - buttonWidth / 2;
+    restartButton.y = size / 2 - buttonHeight / 2;
     restartButton.eventMode = 'dynamic';
     restartButton.cursor = 'pointer';
 

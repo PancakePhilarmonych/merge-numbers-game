@@ -11,7 +11,7 @@ import App from './App';
 export default class GameManager {
   private app: App = new App();
   private store: Store = new Store();
-  private grid = new Grid(getMaxAvailibleSideSize(), getMaxAvailibleSideSize());
+  private grid = new Grid(getMaxAvailibleSideSize());
 
   private availibleCells: Cell[] = [];
   private availibleForMerge: GameObject[] = [];
@@ -30,8 +30,8 @@ export default class GameManager {
     this.app.instance.stage.addChild(this.app.container);
     this.app.instance.stage.hitArea = this.app.instance.screen;
 
-    this.restartView = new RestartView(size, size);
-    this.startView = new StartView(size, size);
+    this.restartView = new RestartView(size);
+    this.startView = new StartView(size);
     this.startView.show();
     this.restartView.container.on('mg-restart', () => this.restartGame());
     this.startView.container.on('mg-start', () => {

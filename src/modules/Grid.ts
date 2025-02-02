@@ -7,10 +7,10 @@ export default class Grid {
   private selected: Cell | null = null;
   public cellSize: number;
 
-  constructor(gameWidth: number, gameHeight: number) {
+  constructor(size: number) {
     this.cells = [];
-    const cellWidth = gameWidth / DEFAULT_GRID_SIZE;
-    const cellHeight = gameHeight / DEFAULT_GRID_SIZE;
+    const cellWidth = size / DEFAULT_GRID_SIZE;
+    const cellHeight = size / DEFAULT_GRID_SIZE;
     this.cellSize = cellWidth > cellHeight ? cellHeight : cellWidth;
 
     this.initRows(DEFAULT_GRID_SIZE);

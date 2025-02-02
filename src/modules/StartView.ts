@@ -3,27 +3,27 @@ import * as PIXI from 'pixi.js';
 export default class StartView {
   public container: PIXI.Container = new PIXI.Container();
 
-  constructor(width: number, height: number) {
+  constructor(size: number) {
     this.container.zIndex = 100;
-    this.container.width = width;
-    this.container.height = height;
+    this.container.width = size;
+    this.container.height = size;
 
-    this.container.addChild(this.createStartBackground(width, height));
-    this.container.addChild(this.createStartButton(width, height));
+    this.container.addChild(this.createStartBackground(size));
+    this.container.addChild(this.createStartButton(size));
   }
 
-  private createStartBackground(width: number, height: number) {
+  private createStartBackground(size: number) {
     const startBackground = new PIXI.Graphics();
     startBackground.beginFill(0x2ecc71, 0.9);
-    startBackground.drawRect(0, 0, width, height);
+    startBackground.drawRect(0, 0, size, size);
     startBackground.endFill();
 
     return startBackground;
   }
 
-  public createStartButton(width: number, height: number) {
-    const buttonWidth = width / 2;
-    const buttonHeight = height / 6;
+  public createStartButton(size: number) {
+    const buttonWidth = size / 2;
+    const buttonHeight = size / 6;
     const radius = 15;
 
     const startButton = new PIXI.Container();
@@ -54,8 +54,8 @@ export default class StartView {
 
     startButton.addChild(startText);
 
-    startButton.x = (width - buttonWidth) / 2;
-    startButton.y = (height - buttonHeight) / 2;
+    startButton.x = (size - buttonWidth) / 2;
+    startButton.y = (size - buttonHeight) / 2;
 
     startButton.eventMode = 'dynamic';
     startButton.cursor = 'pointer';
