@@ -35,6 +35,19 @@ export const getSpriteByColor: Record<Colors, PIXI.Texture> = {
   [Colors.EMPTY]: PIXI.Texture.from(empty),
 };
 
+export const getHexColorByColor = (color: Colors): PIXI.ColorSource => {
+  switch (color) {
+    case Colors.RED:
+      return 0xff7675;
+    case Colors.YELLOW:
+      return 0xf5cd79;
+    case Colors.BLUE:
+      return 0x74b9ff;
+    default:
+      return 0x000000;
+  }
+};
+
 export const maxLevelColors = [Colors.BLUE, Colors.RED, Colors.YELLOW];
 
 export const smoothMoveTo = (
