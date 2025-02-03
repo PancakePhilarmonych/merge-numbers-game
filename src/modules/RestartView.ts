@@ -88,8 +88,25 @@ export default class RestartView extends PIXI.Container {
     return scoreText;
   }
 
-  public setScoreText(width: number, height: number, score: number) {
+  private createBestScoreText(width: number, height: number, bestScore: number) {
+    const bestScoreText = new PIXI.Text(`Best score: ${bestScore}`, {
+      fill: 0xffffff,
+      fontSize: 30,
+      fontFamily: 'Titan One',
+      align: 'center',
+    });
+
+    bestScoreText.anchor.set(0.5);
+    bestScoreText.x = width / 2;
+    bestScoreText.y = height / 4;
+
+    return bestScoreText;
+  }
+
+  public setScoreText(width: number, height: number, score: number, bestScoreText: number) {
     this.container.removeChild(this.container.children[3]);
+    this.container.removeChild(this.container.children[4]);
+    this.container.addChild(this.createBestScoreText(width, height, bestScoreText));
     this.container.addChild(this.createScoreText(width, height, score));
   }
 

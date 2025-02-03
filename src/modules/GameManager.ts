@@ -339,6 +339,7 @@ export default class GameManager {
           this.app.instance.view.width,
           this.app.instance.view.height,
           this.store.getScore(),
+          this.store.getBestScore(),
         );
 
         if (this.selectedObject) {
