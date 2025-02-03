@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import Cell from './Cell';
-import { Colors, getSpriteByColor } from '../utils';
+import { Colors, getHexColorByColor, getSpriteByColor } from '../utils';
 import SelectedCell from '../assets/sprites/blocks/selected.png';
 
 export class GameObject extends PIXI.Container {
@@ -109,6 +109,21 @@ export class GameObject extends PIXI.Container {
   levelUp() {
     this.level++;
     this.levelText.text = this.getLevel();
+  }
+
+  private createGameObjectGraphics(size: number) {
+    const border = new PIXI.Graphics()
+      .lineStyle(5, 0xffffff, 1)
+      .drawRoundedRect(0, 0, size, size, 15);
+
+    const graphics = new PIXI.Graphics();
+    graphics.beginFill(getHexColorByColor(this.color));
+    graphics.drawRoundedRect(0, 0, size, size, 15);
+    graphics.endFill();
+    graphics.addChild(border);
+
+    graphics.zIndex = 1;
+    return graphics;
   }
 
   public updateSize(size: number) {
