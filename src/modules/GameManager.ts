@@ -141,7 +141,6 @@ export default class GameManager {
 
     this.gameObjects.push(newGameObject);
     this.app.container.addChild(newGameObject);
-    cell.setGameObject(newGameObject);
 
     gsap.from(newGameObject, {
       alpha: 0.0,
@@ -182,8 +181,6 @@ export default class GameManager {
       if (randomColor === Colors.EMPTY) return;
 
       const newGameObject = new GameObject(cell, randomColor);
-
-      cell.setGameObject(newGameObject);
 
       this.gameObjects.push(newGameObject);
       this.app.container.addChild(newGameObject);

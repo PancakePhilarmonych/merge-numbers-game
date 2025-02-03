@@ -59,6 +59,7 @@ export class GameObject extends PIXI.Container {
     this.addChild(this.selection);
 
     this.on('pointerdown', this.onPointedDown, this);
+    cell.setGameObject(this);
   }
 
   setPosition(x: number, y: number) {
