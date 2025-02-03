@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import Cell from './Cell';
 import { GameObject } from './GameObject';
 import { Colors, getRandomColor } from './../utils';
-const DEFAULT_GRID_SIZE = 4;
+const DEFAULT_GRID_SIZE = 5;
 
 export default class Grid {
   private cells: Cell[][];
