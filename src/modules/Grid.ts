@@ -1,17 +1,19 @@
 import * as PIXI from 'pixi.js';
 import Cell from './Cell';
-const DEFAULT_GRID_SIZE = 5;
+import { GameObject } from './GameObject';
+import { Colors, getRandomColor } from './../utils';
+const DEFAULT_GRID_SIZE = 4;
 
 export default class Grid {
   private cells: Cell[][];
   private selected: Cell | null = null;
-  public cellSize: number;
+  public gameObjects: GameObject[];
+  public size: number;
 
   constructor(size: number) {
     this.cells = [];
-    const cellWidth = size / DEFAULT_GRID_SIZE;
-    const cellHeight = size / DEFAULT_GRID_SIZE;
-    this.cellSize = cellWidth > cellHeight ? cellHeight : cellWidth;
+    this.gameObjects = [];
+    this.size = size / DEFAULT_GRID_SIZE;
 
     this.initRows(DEFAULT_GRID_SIZE);
   }
@@ -21,7 +23,7 @@ export default class Grid {
       this.cells[row] = [];
 
       for (let col = 0; col < rowsCount; col++) {
-        const cell = new Cell(col, row, this.cellSize);
+        const cell = new Cell(col, row, this.size);
         this.cells[row][col] = cell;
       }
     }
@@ -81,16 +83,34 @@ export default class Grid {
     return this.flatCells.every((cell: Cell) => cell.getGameObject() !== null);
   }
 
-  public updateSize(newWidth: number, newHeight: number) {
-    const cellWidth = newWidth / DEFAULT_GRID_SIZE;
-    const cellHeight = newHeight / DEFAULT_GRID_SIZE;
+  public generateGameObjects(): void {
+    this.flatCells.forEach((cell: Cell) => {
+      if (this.gameObjects.length >= 15) return;
+      const hasGameObject = cell.getGameObject();
 
-    this.cellSize = Math.min(cellWidth, cellHeight);
+      if (hasGameObject) return;
+
+      const randomColor = getRandomColor();
+
+      if (randomColor === Colors.EMPTY) return;
+
+      const newGameObject = new GameObject(cell, randomColor);
+
+      this.gameObjects.push(newGameObject);
+    });
+
+    if (this.gameObjects.length < 15) {
+      this.generateGameObjects();
+    }
+  }
+
+  public updateSize(newSize: number) {
+    this.size = newSize / DEFAULT_GRID_SIZE;
 
     for (let row = 0; row < DEFAULT_GRID_SIZE; row++) {
       for (let col = 0; col < DEFAULT_GRID_SIZE; col++) {
         const cell = this.cells[row][col];
-        cell.updateSize(this.cellSize);
+        cell.updateSize(this.size);
       }
     }
   }

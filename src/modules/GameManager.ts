@@ -15,7 +15,6 @@ export default class GameManager {
 
   private availibleCells: Cell[] = [];
   private availibleForMerge: GameObject[] = [];
-  private gameObjects: GameObject[] = [];
   private selectedObject: GameObject | null = null;
   private pause = false;
   private restartView: RestartView;
@@ -26,7 +25,11 @@ export default class GameManager {
     this.setMainContainer();
     this.setListeners();
 
-    this.generateGameObjects();
+    this.grid.generateGameObjects();
+
+    this.grid.gameObjects.forEach((gameObject: GameObject) => {
+      this.app.container.addChild(gameObject);
+    });
     this.app.instance.stage.addChild(this.app.container);
     this.app.instance.stage.hitArea = this.app.instance.screen;
 
@@ -49,7 +52,7 @@ export default class GameManager {
     const newSize = getMaxAvailibleSideSize();
 
     this.app.instance.renderer.resize(newSize, newSize);
-    this.grid.updateSize(newSize, newSize);
+    this.grid.updateSize(newSize);
     this.startView.resize();
     this.restartView.resize();
   }
@@ -139,7 +142,7 @@ export default class GameManager {
   private addNewObject(cell: Cell, color: Colors): void {
     const newGameObject = new GameObject(cell, color);
 
-    this.gameObjects.push(newGameObject);
+    this.grid.gameObjects.push(newGameObject);
     this.app.container.addChild(newGameObject);
 
     gsap.from(newGameObject, {
@@ -163,37 +166,15 @@ export default class GameManager {
       duration: 0.2,
     });
     this.selectedObject.destroy();
-    const gameObjectIndex = this.gameObjects.indexOf(this.selectedObject);
-    this.gameObjects.splice(gameObjectIndex, 1);
+    const gameObjectIndex = this.grid.gameObjects.indexOf(this.selectedObject);
+    this.grid.gameObjects.splice(gameObjectIndex, 1);
     this.selectedObject.getCell().removeGameObject();
     this.selectedObject = null;
   }
 
-  private generateGameObjects(): void {
-    const gridCells = this.grid.flatCells;
-    gridCells.forEach((cell: Cell) => {
-      const hasGameObject = cell.getGameObject();
-
-      if (hasGameObject) return;
-
-      const randomColor = getRandomColor();
-
-      if (randomColor === Colors.EMPTY) return;
-
-      const newGameObject = new GameObject(cell, randomColor);
-
-      this.gameObjects.push(newGameObject);
-      this.app.container.addChild(newGameObject);
-    });
-
-    if (this.gameObjects.length < 16) {
-      this.generateGameObjects();
-    }
-  }
-
   private setObjectToCell(object: GameObject, cell: Cell): void {
     const cellGameObject = cell.getGameObject();
-    const cellSize = this.grid.cellSize;
+    const cellSize = this.grid.size;
     const cellX = cellSize * cell.x + cellSize / 2;
     const cellY = cellSize * cell.y + cellSize / 2;
 
@@ -245,7 +226,7 @@ export default class GameManager {
   }
 
   moveObjectToOwnCell(object: GameObject): void {
-    const cellSize = this.grid.cellSize;
+    const cellSize = this.grid.size;
     const objectCell = object.getCell()!;
 
     const objectCellX = cellSize * objectCell.x + cellSize / 2;
@@ -265,7 +246,7 @@ export default class GameManager {
     const cellGameObject = cell.getGameObject() || null;
     if (!cellGameObject) return;
 
-    const cellSize = this.grid.cellSize;
+    const cellSize = this.grid.size;
     const cellX = cellSize * cell.x + cellSize / 2;
     const cellY = cellSize * cell.y + cellSize / 2;
 
@@ -280,8 +261,8 @@ export default class GameManager {
     object.selection.alpha = 0;
     this.levelUpObject(cellGameObject);
     this.selectedObject = cellGameObject;
-    const gameObjectIndex = this.gameObjects.indexOf(object);
-    this.gameObjects.splice(gameObjectIndex, 1);
+    const gameObjectIndex = this.grid.gameObjects.indexOf(object);
+    this.grid.gameObjects.splice(gameObjectIndex, 1);
 
     this.cleanSteps();
 
@@ -321,19 +302,22 @@ export default class GameManager {
   public restartGame(): void {
     this.cleanSteps();
 
-    this.gameObjects.forEach((gameObject: GameObject) => {
+    this.grid.gameObjects.forEach((gameObject: GameObject) => {
       gameObject.destroy();
     });
 
     this.selectedObject = null;
 
-    this.gameObjects = [];
+    this.grid.gameObjects = [];
     this.grid.cleanAllCells();
 
     this.selectedObject = null;
 
     this.store.reset();
-    this.generateGameObjects();
+    this.grid.generateGameObjects();
+    this.grid.gameObjects.forEach((gameObject: GameObject) => {
+      this.app.container.addChild(gameObject);
+    });
     this.app.container.eventMode = 'dynamic';
     this.restartView.hide();
     this.pause = false;
