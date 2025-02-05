@@ -58,12 +58,11 @@ export default class GameManager {
   }
 
   private setMainContainer(): void {
-    const cellselectArea = this.grid.getContainers();
     this.app.container.eventMode = 'dynamic';
     this.app.container.sortableChildren = true;
     this.app.container.interactiveChildren = true;
     this.app.container.eventMode = 'none';
-    this.app.container.addChild(...cellselectArea);
+    this.app.container.addChild(...this.grid.cellsContainers);
   }
 
   private setListeners(): void {

@@ -6,7 +6,6 @@ const DEFAULT_GRID_SIZE = 5;
 
 export default class Grid {
   private cells: Cell[][];
-  private selected: Cell | null = null;
   public gameObjects: GameObject[];
   public size: number;
 
@@ -29,36 +28,11 @@ export default class Grid {
     }
   }
 
-  getContainers(): PIXI.Container[] {
-    return this.cells.map((row: Cell[]) => row.map((cell: Cell) => cell)).flat();
-  }
-
   public getCell(x: number, y: number): Cell | null {
     return this.cells?.[x]?.[y] ?? null;
   }
 
-  public select(cell: Cell): void {
-    if (this.selected) {
-      this.deselect();
-    }
-
-    this.selected = cell;
-  }
-
-  public deselect(): void {
-    if (this.selected) {
-      this.selected = null;
-    }
-  }
-
-  getSelectedCellPosition(x: number, y: number): { x: number; y: number } {
-    return {
-      x: Math.floor(x / this.cells[x][y].position.x),
-      y: Math.floor(y / this.cells[x][y].position.y),
-    };
-  }
-
-  cleanAllCells(): void {
+  public cleanAllCells(): void {
     this.cells.forEach(row =>
       row.forEach(cell => {
         cell.removeGameObject();
@@ -67,20 +41,8 @@ export default class Grid {
     );
   }
 
-  getRandomEmptyCell(): Cell {
+  public getRandomEmptyCell(): Cell {
     return this.emptyCells[Math.floor(Math.random() * this.emptyCells.length)];
-  }
-
-  get flatCells(): Cell[] {
-    return this.cells.flat();
-  }
-
-  get emptyCells(): Cell[] {
-    return this.flatCells.filter(cell => cell.getGameObject() === null);
-  }
-
-  get isFull(): boolean {
-    return this.flatCells.every((cell: Cell) => cell.getGameObject() !== null);
   }
 
   public generateGameObjects(): void {
@@ -113,5 +75,21 @@ export default class Grid {
         cell.updateSize(this.size);
       }
     }
+  }
+
+  get flatCells(): Cell[] {
+    return this.cells.flat();
+  }
+
+  get emptyCells(): Cell[] {
+    return this.flatCells.filter(cell => cell.getGameObject() === null);
+  }
+
+  get isFull(): boolean {
+    return this.flatCells.every((cell: Cell) => cell.getGameObject() !== null);
+  }
+
+  get cellsContainers(): PIXI.Container[] {
+    return this.cells.map((row: Cell[]) => row.map((cell: Cell) => cell)).flat();
   }
 }
