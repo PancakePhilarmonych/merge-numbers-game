@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
-import Cell from './Cell';
-import { Colors, getHexColorByColor, getSpriteByColor } from '../utils';
-import SelectedCell from '../assets/sprites/blocks/selected.png';
+import Cell from '@/modules/core/Cell';
+import { Colors, getHexColorByColor, getSpriteByColor } from '@/utils';
+import SelectedCell from '@/assets/sprites/blocks/selected.png';
 
 export class GameObject extends PIXI.Container {
   private color: Colors;

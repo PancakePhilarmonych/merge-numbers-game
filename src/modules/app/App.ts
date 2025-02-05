@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { getMaxAvailibleSideSize } from '../utils';
+import { getMaxAvailibleSideSize } from '@/utils';
 export default class App {
   public instance: PIXI.Application<HTMLCanvasElement>;
   public container: PIXI.Container = new PIXI.Container();

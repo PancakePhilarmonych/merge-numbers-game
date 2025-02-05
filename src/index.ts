@@ -1,5 +1,5 @@
 import './assets/main.sass';
-import GameManager from './modules/GameManager';
+import GameManager from './modules/core/GameManager';
 
 const loading = document.createElement('div');
 loading.style.position = 'absolute';

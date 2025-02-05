@@ -1,12 +1,12 @@
-import { GameObject } from './GameObject';
-import Grid from './Grid';
-import Store from './Store';
-import Cell from './Cell';
-import { Colors, smoothMoveTo, getRandomColor, getMaxAvailibleSideSize } from '../utils';
-import RestartView from './RestartView';
-import StartView from './StartView';
+import { GameObject } from '@/modules/core/GameObject';
+import Grid from '@/modules/core/Grid';
+import Store from '@/modules/app/Store';
+import Cell from '@/modules/core/Cell';
+import { Colors, smoothMoveTo, getRandomColor, getMaxAvailibleSideSize } from '@/utils';
+import RestartView from '@/modules/ui/RestartView';
+import StartView from '@/modules/ui/StartView';
 import { gsap } from 'gsap';
-import App from './App';
+import App from '@/modules/app/App';
 
 export default class GameManager {
   private app: App = new App();
