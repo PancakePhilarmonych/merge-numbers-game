@@ -157,20 +157,6 @@ export default class GameManager {
     });
   }
 
-  public deleteSelectedObject(): void {
-    if (!this.selectedObject) return;
-    gsap.to(this.selectedObject, { alpha: 0.1, duration: 0.2 });
-    gsap.to(this.selectedObject.selection, {
-      alpha: 0.0,
-      duration: 0.2,
-    });
-    this.selectedObject.destroy();
-    const gameObjectIndex = this.grid.gameObjects.indexOf(this.selectedObject);
-    this.grid.gameObjects.splice(gameObjectIndex, 1);
-    this.selectedObject.getCell().removeGameObject();
-    this.selectedObject = null;
-  }
-
   private setObjectToCell(object: GameObject, cell: Cell): void {
     const cellGameObject = cell.getGameObject();
     const cellSize = this.grid.size;
