@@ -1,10 +1,10 @@
 import * as PIXI from 'pixi.js';
 import { gsap } from 'gsap';
 
-import red from '../assets/sprites/blocks/red.png';
-import yellow from '../assets/sprites/blocks/yellow.png';
-import blue from '../assets/sprites/blocks/blue.png';
-import empty from '../assets/sprites/blocks/empty.png';
+import red from '@/assets/sprites/blocks/red.png';
+import yellow from '@/assets/sprites/blocks/yellow.png';
+import blue from '@/assets/sprites/blocks/blue.png';
+import empty from '@/assets/sprites/blocks/empty.png';
 
 export enum Colors {
   RED = 'RED',
