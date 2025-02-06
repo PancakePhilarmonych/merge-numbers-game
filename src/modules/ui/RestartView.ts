@@ -73,7 +73,7 @@ export default class RestartView extends PIXI.Container {
     return restartText;
   }
 
-  private createScoreText(width: number, height: number, score: number) {
+  private createScoreText(score: number) {
     const scoreText = new PIXI.Text(`Score: ${score}`, {
       fill: 0xffffff,
       fontSize: 50,
@@ -82,13 +82,13 @@ export default class RestartView extends PIXI.Container {
     });
 
     scoreText.anchor.set(0.5);
-    scoreText.x = width / 2;
-    scoreText.y = height / 3;
+    scoreText.x = this.container.width / 2;
+    scoreText.y = this.container.height / 3;
 
     return scoreText;
   }
 
-  private createBestScoreText(width: number, height: number, bestScore: number) {
+  private createBestScoreText(bestScore: number) {
     const bestScoreText = new PIXI.Text(`Best score: ${bestScore}`, {
       fill: 0xffffff,
       fontSize: 30,
@@ -97,17 +97,17 @@ export default class RestartView extends PIXI.Container {
     });
 
     bestScoreText.anchor.set(0.5);
-    bestScoreText.x = width / 2;
-    bestScoreText.y = height / 4;
+    bestScoreText.x = this.container.width / 2;
+    bestScoreText.y = this.container.height / 4;
 
     return bestScoreText;
   }
 
-  public setScoreText(width: number, height: number, score: number, bestScoreText: number) {
+  public setScoreText(score: number, bestScoreText: number) {
     this.container.removeChild(this.container.children[3]);
     this.container.removeChild(this.container.children[4]);
-    this.container.addChild(this.createBestScoreText(width, height, bestScoreText));
-    this.container.addChild(this.createScoreText(width, height, score));
+    this.container.addChild(this.createBestScoreText(bestScoreText));
+    this.container.addChild(this.createScoreText(score));
   }
 
   public show() {
