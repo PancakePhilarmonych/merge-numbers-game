@@ -52,6 +52,7 @@ export default class GameManager {
     const newSize = getMaxAvailibleSideSize();
 
     this.app.instance.renderer.resize(newSize, newSize);
+    this.app.instance.render();
     this.grid.updateSize(newSize);
     this.startView.resize();
     this.restartView.resize();
@@ -320,12 +321,7 @@ export default class GameManager {
       if (this.grid.isFull) {
         this.pause = true;
         this.restartView.show();
-        this.restartView.setScoreText(
-          this.app.instance.view.width,
-          this.app.instance.view.height,
-          this.store.getScore(),
-          this.store.getBestScore(),
-        );
+        this.restartView.setScoreText(this.store.getScore(), this.store.getBestScore());
 
         if (this.selectedObject) {
           this.moveObjectToOwnCell(this.selectedObject);
@@ -333,6 +329,8 @@ export default class GameManager {
           this.app.container.removeAllListeners();
           this.selectedObject = null;
         }
+
+        this.app.instance.ticker.stop();
       }
 
       if (!this.selectedObject) return;
