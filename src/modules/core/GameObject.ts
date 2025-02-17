@@ -20,20 +20,18 @@ export class GameObject extends PIXI.Container {
     this.color = color;
     this.position = { x, y };
 
-    this.x = size * x + size / 2;
-    this.y = size * y + size / 2;
+    this.x = size * x;
+    this.y = size * y;
     this.zIndex = 1;
 
     this.sprite = PIXI.Sprite.from(getSpriteByColor[color]);
     this.selection = PIXI.Sprite.from(SelectedCell);
     this.sprite.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-    this.sprite.anchor.set(0.5);
     this.sprite.width = size;
     this.sprite.height = size;
 
     this.selection.width = size;
     this.selection.height = size;
-    this.selection.anchor.set(0.5);
 
     this.selection.alpha = 0;
     this.selection.zIndex = 2;
@@ -47,9 +45,9 @@ export class GameObject extends PIXI.Container {
       fill: 0xffffff,
     });
 
+    this.levelText.x = this.sprite.x + this.sprite.width / 2;
+    this.levelText.y = this.sprite.y + this.sprite.height / 2;
     this.levelText.anchor.set(0.5);
-    this.levelText.x = this.sprite.x;
-    this.levelText.y = this.sprite.y;
     this.levelText.zIndex = 2;
     this.levelText.eventMode = 'none';
     this.addChild(this.sprite);
@@ -126,8 +124,8 @@ export class GameObject extends PIXI.Container {
   }
 
   public updateSize(size: number) {
-    this.x = this.cell.x * size + size / 2;
-    this.y = this.cell.y * size + size / 2;
+    this.x = this.cell.x * size;
+    this.y = this.cell.y * size;
 
     this.sprite.width = size;
     this.sprite.height = size;

@@ -161,8 +161,8 @@ export default class GameManager {
   private setObjectToCell(object: GameObject, cell: Cell): void {
     const cellGameObject = cell.getGameObject();
     const cellSize = this.grid.size;
-    const cellX = cellSize * cell.x + cellSize / 2;
-    const cellY = cellSize * cell.y + cellSize / 2;
+    const cellX = cellSize * cell.x;
+    const cellY = cellSize * cell.y;
 
     if (cellGameObject) {
       if (cellGameObject === object) {
@@ -215,8 +215,8 @@ export default class GameManager {
     const cellSize = this.grid.size;
     const objectCell = object.getCell()!;
 
-    const objectCellX = cellSize * objectCell.x + cellSize / 2;
-    const objectCellY = cellSize * objectCell.y + cellSize / 2;
+    const objectCellX = cellSize * objectCell.x;
+    const objectCellY = cellSize * objectCell.y;
 
     smoothMoveTo(object, objectCellX, objectCellY, 0.5);
     object.selection.alpha = 0.9;
@@ -233,8 +233,8 @@ export default class GameManager {
     if (!cellGameObject) return;
 
     const cellSize = this.grid.size;
-    const cellX = cellSize * cell.x + cellSize / 2;
-    const cellY = cellSize * cell.y + cellSize / 2;
+    const cellX = cellSize * cell.x;
+    const cellY = cellSize * cell.y;
 
     cellGameObject.x = object.x;
     cellGameObject.y = object.y;
