@@ -140,7 +140,7 @@ export default class GameManager {
   }
 
   private addNewObject(cell: Cell, color: Colors): void {
-    const newGameObject = new GameObject(cell, color);
+    const newGameObject = new GameObject(cell, color, this.grid.size);
 
     this.grid.gameObjects.push(newGameObject);
     this.app.container.addChild(newGameObject);

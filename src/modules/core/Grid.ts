@@ -56,7 +56,7 @@ export default class Grid {
 
       if (randomColor === Colors.EMPTY) return;
 
-      const newGameObject = new GameObject(cell, randomColor);
+      const newGameObject = new GameObject(cell, randomColor, this.size);
 
       this.gameObjects.push(newGameObject);
     });

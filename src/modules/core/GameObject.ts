@@ -12,8 +12,8 @@ export class GameObject extends PIXI.Container {
   public level: number = 1;
   public levelText: PIXI.Text;
 
-  constructor(cell: Cell, color: Colors) {
-    const [x, y, size] = [cell.x, cell.y, cell.sprite.width];
+  constructor(cell: Cell, color: Colors, size: number) {
+    const [x, y] = [cell.x, cell.y];
 
     super();
     this.cell = cell;
@@ -22,8 +22,6 @@ export class GameObject extends PIXI.Container {
 
     this.x = size * x + size / 2;
     this.y = size * y + size / 2;
-    this.width = size;
-    this.height = size;
     this.zIndex = 1;
 
     this.sprite = PIXI.Sprite.from(getSpriteByColor[color]);
