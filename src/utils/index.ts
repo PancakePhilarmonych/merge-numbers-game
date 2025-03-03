@@ -1,11 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { gsap } from 'gsap';
 
-import red from '@/assets/sprites/blocks/red.png';
-import yellow from '@/assets/sprites/blocks/yellow.png';
-import blue from '@/assets/sprites/blocks/blue.png';
-import empty from '@/assets/sprites/blocks/empty.png';
-
 export enum Colors {
   RED = 'RED',
   YELLOW = 'YELLOW',
@@ -26,13 +21,6 @@ export const ColorsTextMap: Record<Colors, string> = {
   [Colors.YELLOW]: 'Yellow',
   [Colors.BLUE]: 'Blue',
   [Colors.EMPTY]: 'Empty',
-};
-
-export const getSpriteByColor: Record<Colors, PIXI.Texture> = {
-  [Colors.RED]: PIXI.Texture.from(red),
-  [Colors.YELLOW]: PIXI.Texture.from(yellow),
-  [Colors.BLUE]: PIXI.Texture.from(blue),
-  [Colors.EMPTY]: PIXI.Texture.from(empty),
 };
 
 export const getHexColorByColor = (color: Colors): PIXI.ColorSource => {
