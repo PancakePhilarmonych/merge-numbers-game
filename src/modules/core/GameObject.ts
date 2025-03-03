@@ -1,7 +1,8 @@
 import * as PIXI from 'pixi.js';
-import Cell from './Cell';
-import { Colors, getSpriteByColor } from '../utils';
-import SelectedCell from '../assets/sprites/blocks/selected.png';
+import Cell from '@/modules/core/Cell';
+import { Colors, getHexColorByColor, getSpriteByColor } from '@/utils';
+import SelectedCell from '@/assets/sprites/blocks/selected.png';
+
 export class GameObject extends PIXI.Container {
   private color: Colors;
   private cell: Cell;
@@ -11,30 +12,26 @@ export class GameObject extends PIXI.Container {
   public level: number = 1;
   public levelText: PIXI.Text;
 
-  constructor(cell: Cell, color: Colors) {
-    const [x, y, size] = [cell.x, cell.y, cell.sprite.width];
+  constructor(cell: Cell, color: Colors, size: number) {
+    const [x, y] = [cell.x, cell.y];
 
     super();
     this.cell = cell;
     this.color = color;
     this.position = { x, y };
 
-    this.x = size * x + size / 2;
-    this.y = size * y + size / 2;
-    this.width = size;
-    this.height = size;
+    this.x = size * x;
+    this.y = size * y;
     this.zIndex = 1;
 
     this.sprite = PIXI.Sprite.from(getSpriteByColor[color]);
     this.selection = PIXI.Sprite.from(SelectedCell);
     this.sprite.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-    this.sprite.anchor.set(0.5);
     this.sprite.width = size;
     this.sprite.height = size;
 
     this.selection.width = size;
     this.selection.height = size;
-    this.selection.anchor.set(0.5);
 
     this.selection.alpha = 0;
     this.selection.zIndex = 2;
@@ -48,9 +45,9 @@ export class GameObject extends PIXI.Container {
       fill: 0xffffff,
     });
 
+    this.levelText.x = this.sprite.x + this.sprite.width / 2;
+    this.levelText.y = this.sprite.y + this.sprite.height / 2;
     this.levelText.anchor.set(0.5);
-    this.levelText.x = this.sprite.x;
-    this.levelText.y = this.sprite.y;
     this.levelText.zIndex = 2;
     this.levelText.eventMode = 'none';
     this.addChild(this.sprite);
@@ -58,6 +55,7 @@ export class GameObject extends PIXI.Container {
     this.addChild(this.selection);
 
     this.on('pointerdown', this.onPointedDown, this);
+    cell.setGameObject(this);
   }
 
   setPosition(x: number, y: number) {
@@ -108,5 +106,33 @@ export class GameObject extends PIXI.Container {
   levelUp() {
     this.level++;
     this.levelText.text = this.getLevel();
+  }
+
+  private createGameObjectGraphics(size: number) {
+    const border = new PIXI.Graphics()
+      .lineStyle(5, 0xffffff, 1)
+      .drawRoundedRect(0, 0, size, size, 15);
+
+    const graphics = new PIXI.Graphics();
+    graphics.beginFill(getHexColorByColor(this.color));
+    graphics.drawRoundedRect(0, 0, size, size, 15);
+    graphics.endFill();
+    graphics.addChild(border);
+
+    graphics.zIndex = 1;
+    return graphics;
+  }
+
+  public updateSize(size: number) {
+    this.x = this.cell.x * size;
+    this.y = this.cell.y * size;
+
+    this.sprite.width = size;
+    this.sprite.height = size;
+    this.selection.width = size;
+    this.selection.height = size;
+    this.levelText.style.fontSize = size / 3;
+    this.levelText.x = this.sprite.x;
+    this.levelText.y = this.sprite.y;
   }
 }

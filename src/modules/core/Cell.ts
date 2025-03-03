@@ -1,8 +1,8 @@
 import * as PIXI from 'pixi.js';
-import EmptyField from '../assets/sprites/blocks/grass-tile.png';
-import EmptyFieldSecond from '../assets/sprites/blocks/grass-tile-second.png';
-import { GameObject } from './GameObject';
-import AvaibleCell from '../assets/sprites/blocks/second-availible.png';
+import EmptyField from '@/assets/sprites/blocks/grass-tile.png';
+import EmptyFieldSecond from '@/assets/sprites/blocks/grass-tile-second.png';
+import { GameObject } from '@/modules/core/GameObject';
+import AvaibleCell from '@/assets/sprites/blocks/second-availible.png';
 
 export default class Cell extends PIXI.Container {
   public sprite: PIXI.Sprite;
@@ -72,5 +72,19 @@ export default class Cell extends PIXI.Container {
 
   removeGameObject() {
     this.gameObject = null;
+  }
+
+  public updateSize(size: number) {
+    this.sprite.width = size;
+    this.sprite.height = size;
+    this.sprite.x = size * this.column;
+    this.sprite.y = size * this.row;
+
+    this.availibleArea.width = size;
+    this.availibleArea.height = size;
+    this.availibleArea.x = size * this.column;
+    this.availibleArea.y = size * this.row;
+
+    this.gameObject?.updateSize(size);
   }
 }

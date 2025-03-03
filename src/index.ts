@@ -1,7 +1,6 @@
 import './assets/main.sass';
-import GameManager from './modules/GameManager';
+import GameManager from './modules/core/GameManager';
 
-document.body.style.backgroundColor = '#000';
 const loading = document.createElement('div');
 loading.style.position = 'absolute';
 loading.style.top = '0';
@@ -13,11 +12,13 @@ loading.style.display = 'flex';
 loading.style.justifyContent = 'center';
 loading.style.alignItems = 'center';
 loading.style.zIndex = '1000';
+loading.style.fontSize = '18px';
 loading.innerHTML = '<h1 style="color: #fff">Loading...</h1>';
 document.body.appendChild(loading);
 
+// Имитация загрузки с задержкой (Лоадер ассетов)
 setTimeout(() => {
   new GameManager();
-  document.body.style.backgroundColor = '#fff';
+
   document.body.removeChild(loading);
-}, 1500);
+}, 500);
