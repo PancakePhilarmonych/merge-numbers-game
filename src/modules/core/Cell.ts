@@ -1,12 +1,11 @@
 import * as PIXI from 'pixi.js';
-import EmptyField from '@/assets/sprites/blocks/grass-tile.png';
-import EmptyFieldSecond from '@/assets/sprites/blocks/grass-tile-second.png';
+import EmptyField from '@/assets/sprites/grass-tile.png';
+import EmptyFieldSecond from '@/assets/sprites/grass-tile-second.png';
 import { GameObject } from '@/modules/core/GameObject';
-import AvaibleCell from '@/assets/sprites/blocks/second-availible.png';
 
 export default class Cell extends PIXI.Container {
   public sprite: PIXI.Sprite;
-  public availibleArea: PIXI.Sprite;
+  public availibleArea: PIXI.Graphics;
   public availible: boolean = false;
   private row: number;
   private column: number;
@@ -24,15 +23,29 @@ export default class Cell extends PIXI.Container {
       this.sprite = PIXI.Sprite.from(EmptyFieldSecond);
     }
 
-    this.availibleArea = PIXI.Sprite.from(AvaibleCell);
+    const offset = 30;
+
+    const border = new PIXI.Graphics()
+      .lineStyle(10, 0xffffff, 0.3)
+      .drawRoundedRect(0 + offset / 2, 0 + offset / 2, size - offset, size - offset, 15);
+
+    this.availibleArea = new PIXI.Graphics();
+    this.availibleArea.beginFill(0xffffff, 0.5);
+    this.availibleArea.drawRoundedRect(
+      0 + offset / 2,
+      0 + offset / 2,
+      size - offset,
+      size - offset,
+      15,
+    );
+    this.availibleArea.endFill();
+    this.availibleArea.addChild(border);
 
     this.sprite.width = size;
     this.sprite.height = size;
     this.sprite.x = size * x;
     this.sprite.y = size * y;
 
-    this.availibleArea.width = size;
-    this.availibleArea.height = size;
     this.availibleArea.x = size * x;
     this.availibleArea.y = size * y;
     this.availibleArea.alpha = 0;
