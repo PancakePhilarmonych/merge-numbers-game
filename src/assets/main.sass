@@ -1,32 +1,51 @@
-@import 'base.sass'
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Titan+One&display=swap')
+@import 'colors.sass'
 
+*
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+  overflow: hidden
 
-.container
+html
+  background: $linear-two
+
+body
+  font-family: 'Titan One', sans-serif
+  background: $background
+
+button
+  font-family: 'Titan One', sans-serif
+  cursor: pointer
+  border: none
+
+  &:focus,
+  &:focus-visible
+    outline: none
+    box-shadow: none
+
+#root
   display: flex
-  flex-direction: column
-  height: 100vh
-  width: 100vw
   justify-content: center
   align-items: center
+  height: 100vh
 
-  #root
-    position: relative
-    width: 600px
-    height: 600px
-    background: #282828
-    border-radius: 4px
-    margin: 20px
+#app
+  display: flex
+  width: 100vw
+  height: 100vh
+  border-radius: 12px
+  border: 5px solid #fff
 
-    canvas
-      border-radius: 4px
-      position: absolute
-      top: 50%
-      left: 50%
-      transform: translate(-50%, -50%)
+.game-container
+  width: 100%
+  height: 100%
+  display: grid
 
-  .action-buttons
-    display: flex
-    flex-direction: row
-    justify-content: space-between
-    width: 100%
-    margin-top: 20px
+  @media (orientation: landscape)
+    grid-template-columns: 20% 60% 20%
+    grid-template-rows: 100%
+
+  @media (orientation: portrait)
+    grid-template-rows: 20% 60% 20%
+    grid-template-columns: 100%
