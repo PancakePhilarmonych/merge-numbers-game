@@ -11,8 +11,7 @@ export default class Cell extends PIXI.Container {
   private column: number;
   private gameObject: GameObject | null = null;
 
-  private readonly AVAILABLE_AREA_PADDING_PERCENT = 15;
-  private readonly BORDER_THICKNESS_PERCENT = 1;
+  private readonly AVAILABLE_AREA_PADDING_PERCENT = 20;
   private readonly CORNER_RADIUS_PERCENT = 5;
 
   constructor(x: number, y: number, size: number) {
