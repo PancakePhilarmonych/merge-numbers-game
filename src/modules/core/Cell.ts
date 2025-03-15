@@ -11,6 +11,10 @@ export default class Cell extends PIXI.Container {
   private column: number;
   private gameObject: GameObject | null = null;
 
+  private readonly AVAILABLE_AREA_PADDING_PERCENT = 15;
+  private readonly BORDER_THICKNESS_PERCENT = 1;
+  private readonly CORNER_RADIUS_PERCENT = 5;
+
   constructor(x: number, y: number, size: number) {
     super();
     this.column = x;
@@ -23,11 +27,15 @@ export default class Cell extends PIXI.Container {
       this.sprite = PIXI.Sprite.from(EmptyFieldSecond);
     }
 
-    const offset = 30;
+    const offset = size * (this.AVAILABLE_AREA_PADDING_PERCENT / 100);
+
+    const borderThickness = Math.max(2, size * (this.BORDER_THICKNESS_PERCENT / 100));
+
+    const cornerRadius = size * (this.CORNER_RADIUS_PERCENT / 100);
 
     const border = new PIXI.Graphics()
-      .lineStyle(10, 0xffffff, 0.3)
-      .drawRoundedRect(0 + offset / 2, 0 + offset / 2, size - offset, size - offset, 15);
+      .lineStyle(borderThickness, 0xffffff, 0.3)
+      .drawRoundedRect(0 + offset / 2, 0 + offset / 2, size - offset, size - offset, cornerRadius);
 
     this.availibleArea = new PIXI.Graphics();
     this.availibleArea.beginFill(0xffffff, 0.5);
@@ -36,7 +44,7 @@ export default class Cell extends PIXI.Container {
       0 + offset / 2,
       size - offset,
       size - offset,
-      15,
+      cornerRadius,
     );
     this.availibleArea.endFill();
     this.availibleArea.addChild(border);
@@ -93,10 +101,36 @@ export default class Cell extends PIXI.Container {
     this.sprite.x = size * this.column;
     this.sprite.y = size * this.row;
 
-    this.availibleArea.width = size;
-    this.availibleArea.height = size;
+    const offset = size * (this.AVAILABLE_AREA_PADDING_PERCENT / 100);
+    const borderThickness = Math.max(2, size * (this.BORDER_THICKNESS_PERCENT / 100));
+    const cornerRadius = size * (this.CORNER_RADIUS_PERCENT / 100);
+
+    const currentAlpha = this.availibleArea.alpha;
+
+    this.removeChild(this.availibleArea);
+
+    const border = new PIXI.Graphics()
+      .lineStyle(borderThickness, 0xffffff, 0.3)
+      .drawRoundedRect(0 + offset / 2, 0 + offset / 2, size - offset, size - offset, cornerRadius);
+
+    this.availibleArea = new PIXI.Graphics();
+    this.availibleArea.beginFill(0xffffff, 0.5);
+    this.availibleArea.drawRoundedRect(
+      0 + offset / 2,
+      0 + offset / 2,
+      size - offset,
+      size - offset,
+      cornerRadius,
+    );
+    this.availibleArea.endFill();
+    this.availibleArea.addChild(border);
     this.availibleArea.x = size * this.column;
     this.availibleArea.y = size * this.row;
+
+    this.availibleArea.alpha = currentAlpha;
+    this.availibleArea.zIndex = 3;
+
+    this.addChild(this.availibleArea);
 
     this.gameObject?.updateSize(size);
   }
