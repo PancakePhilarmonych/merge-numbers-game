@@ -33,8 +33,8 @@ export default class RestartView extends PIXI.Container {
     const restartButton = new PIXI.Container();
 
     const border = new PIXI.Graphics()
-      .lineStyle(10, 0xffffff, 1)
-      .drawRoundedRect(-3, -3, buttonWidth + 6, buttonHeight + 6, radius);
+      .lineStyle(6, 0xffffff, 1)
+      .drawRoundedRect(0, 0, buttonWidth, buttonHeight, radius);
 
     restartButton.addChild(border);
 

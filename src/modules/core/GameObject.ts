@@ -1,16 +1,18 @@
 import * as PIXI from 'pixi.js';
 import Cell from '@/modules/core/Cell';
-import { Colors, getHexColorByColor, getSpriteByColor } from '@/utils';
-import SelectedCell from '@/assets/sprites/blocks/selected.png';
+import { Colors, getHexColorByColor } from '@/utils';
 
 export class GameObject extends PIXI.Container {
   private color: Colors;
   private cell: Cell;
-  private sprite: PIXI.Sprite;
-  public selection: PIXI.Sprite;
+  private sprite: PIXI.Graphics;
+  public selection: PIXI.Graphics;
 
   public level: number = 1;
   public levelText: PIXI.Text;
+
+  private readonly OBJECT_PADDING_PERCENT = 40;
+  private readonly SELECTION_PADDING_PERCENT = 20;
 
   constructor(cell: Cell, color: Colors, size: number) {
     const [x, y] = [cell.x, cell.y];
@@ -24,14 +26,11 @@ export class GameObject extends PIXI.Container {
     this.y = size * y;
     this.zIndex = 1;
 
-    this.sprite = PIXI.Sprite.from(getSpriteByColor[color]);
-    this.selection = PIXI.Sprite.from(SelectedCell);
-    this.sprite.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-    this.sprite.width = size;
-    this.sprite.height = size;
+    const objectOffset = size * (this.OBJECT_PADDING_PERCENT / 100);
+    const selectionOffset = size * (this.SELECTION_PADDING_PERCENT / 100);
 
-    this.selection.width = size;
-    this.selection.height = size;
+    this.sprite = this.createGameObjectGraphics(size, objectOffset);
+    this.selection = this.createSelectionGraphics(size, selectionOffset);
 
     this.selection.alpha = 0;
     this.selection.zIndex = 2;
@@ -44,18 +43,27 @@ export class GameObject extends PIXI.Container {
       fontFamily: 'Titan One',
       fill: 0xffffff,
     });
-
-    this.levelText.x = this.sprite.x + this.sprite.width / 2;
-    this.levelText.y = this.sprite.y + this.sprite.height / 2;
-    this.levelText.anchor.set(0.5);
-    this.levelText.zIndex = 2;
     this.levelText.eventMode = 'none';
-    this.addChild(this.sprite);
-    this.addChild(this.levelText);
+
+    this.positionLevelText(size, objectOffset);
+
+    this.sprite.addChild(this.levelText);
     this.addChild(this.selection);
+    this.addChild(this.sprite);
 
     this.on('pointerdown', this.onPointedDown, this);
     cell.setGameObject(this);
+  }
+
+  private positionLevelText(size: number, offset: number) {
+    this.levelText.anchor.set(0.5);
+
+    const spriteWidth = size - offset;
+    const spriteHeight = size - offset;
+    const offsetHalf = offset / 2;
+
+    this.levelText.x = offsetHalf + spriteWidth / 2;
+    this.levelText.y = offsetHalf + spriteHeight / 2;
   }
 
   setPosition(x: number, y: number) {
@@ -88,11 +96,6 @@ export class GameObject extends PIXI.Container {
     return this.color;
   }
 
-  setColor(color: Colors) {
-    this.color = color;
-    this.sprite.texture = getSpriteByColor[color];
-  }
-
   public getLevel() {
     let result = 1;
 
@@ -108,18 +111,43 @@ export class GameObject extends PIXI.Container {
     this.levelText.text = this.getLevel();
   }
 
-  private createGameObjectGraphics(size: number) {
+  private createGameObjectGraphics(size: number, offset: number, color = '0xffffff') {
+    const xStartPosition = 0 + offset / 2;
+    const yStartPosition = 0 + offset / 2;
+    const width = size - offset;
+    const height = size - offset;
+    const radius = size * 0.05;
     const border = new PIXI.Graphics()
-      .lineStyle(5, 0xffffff, 1)
-      .drawRoundedRect(0, 0, size, size, 15);
+      .lineStyle(6, color, 1)
+      .drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
 
     const graphics = new PIXI.Graphics();
     graphics.beginFill(getHexColorByColor(this.color));
-    graphics.drawRoundedRect(0, 0, size, size, 15);
+    graphics.drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
     graphics.endFill();
     graphics.addChild(border);
 
-    graphics.zIndex = 1;
+    graphics.zIndex = 2;
+    return graphics;
+  }
+
+  private createSelectionGraphics(size: number, offset: number, color = '0xffffff') {
+    const xStartPosition = 0 + offset / 2;
+    const yStartPosition = 0 + offset / 2;
+    const width = size - offset;
+    const height = size - offset;
+    const radius = size * 0.05;
+    const border = new PIXI.Graphics()
+      .lineStyle(6, color, 0.4)
+      .drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
+
+    const graphics = new PIXI.Graphics();
+    graphics.beginFill(color, 0.6);
+    graphics.drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
+    graphics.endFill();
+    graphics.addChild(border);
+
+    graphics.zIndex = 0;
     return graphics;
   }
 
@@ -127,12 +155,24 @@ export class GameObject extends PIXI.Container {
     this.x = this.cell.x * size;
     this.y = this.cell.y * size;
 
-    this.sprite.width = size;
-    this.sprite.height = size;
-    this.selection.width = size;
-    this.selection.height = size;
-    this.levelText.style.fontSize = size / 3;
-    this.levelText.x = this.sprite.x;
-    this.levelText.y = this.sprite.y;
+    const objectOffset = size * (this.OBJECT_PADDING_PERCENT / 100);
+    const selectionOffset = size * (this.SELECTION_PADDING_PERCENT / 100);
+
+    this.removeChild(this.sprite);
+    this.removeChild(this.selection);
+
+    this.sprite = this.createGameObjectGraphics(size, objectOffset);
+    this.selection = this.createSelectionGraphics(size, selectionOffset);
+
+    this.selection.alpha = 0;
+    this.selection.zIndex = 2;
+
+    this.levelText.style.fontSize = this.sprite.width / 3;
+
+    this.positionLevelText(size, objectOffset);
+
+    this.sprite.addChild(this.levelText);
+    this.addChild(this.selection);
+    this.addChild(this.sprite);
   }
 }
