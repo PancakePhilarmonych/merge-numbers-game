@@ -56,7 +56,7 @@ export class GameObject extends PIXI.Container {
   }
 
   private positionLevelText(size: number, offset: number) {
-    this.levelText.anchor.set(0.5, 0.5);
+    this.levelText.anchor.set(0.5);
 
     const spriteWidth = size - offset;
     const spriteHeight = size - offset;
