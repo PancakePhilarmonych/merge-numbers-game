@@ -27,42 +27,43 @@ export default class Cell extends PIXI.Container {
       this.sprite = PIXI.Sprite.from(EmptyFieldSecond);
     }
 
+    this.sprite.width = size;
+    this.sprite.height = size;
+    this.sprite.x = size * x;
+    this.sprite.y = size * y;
+    this.sprite.zIndex = 1;
+
+    this.availibleArea = this.createAvailibleArea(size);
+    this.availibleArea.x = size * x;
+    this.availibleArea.y = size * y;
+    this.availibleArea.alpha = 0;
+    this.availibleArea.zIndex = 3;
+
+    this.addChild(this.sprite);
+    this.addChild(this.availibleArea);
+  }
+
+  private createAvailibleArea(size: number): PIXI.Graphics {
     const offset = size * (this.AVAILABLE_AREA_PADDING_PERCENT / 100);
-
-    const borderThickness = Math.max(2, size * (this.BORDER_THICKNESS_PERCENT / 100));
-
     const cornerRadius = size * (this.CORNER_RADIUS_PERCENT / 100);
 
     const border = new PIXI.Graphics()
-      .lineStyle(borderThickness, 0xffffff, 0.3)
+      .lineStyle(6, 0xffffff, 0.3)
       .drawRoundedRect(0 + offset / 2, 0 + offset / 2, size - offset, size - offset, cornerRadius);
 
-    this.availibleArea = new PIXI.Graphics();
-    this.availibleArea.beginFill(0xffffff, 0.5);
-    this.availibleArea.drawRoundedRect(
+    const availibleArea = new PIXI.Graphics();
+    availibleArea.beginFill(0xffffff, 0.5);
+    availibleArea.drawRoundedRect(
       0 + offset / 2,
       0 + offset / 2,
       size - offset,
       size - offset,
       cornerRadius,
     );
-    this.availibleArea.endFill();
-    this.availibleArea.addChild(border);
+    availibleArea.endFill();
+    availibleArea.addChild(border);
 
-    this.sprite.width = size;
-    this.sprite.height = size;
-    this.sprite.x = size * x;
-    this.sprite.y = size * y;
-
-    this.availibleArea.x = size * x;
-    this.availibleArea.y = size * y;
-    this.availibleArea.alpha = 0;
-
-    this.sprite.zIndex = 1;
-    this.availibleArea.zIndex = 3;
-
-    this.addChild(this.sprite);
-    this.addChild(this.availibleArea);
+    return availibleArea;
   }
 
   get x() {
@@ -101,29 +102,11 @@ export default class Cell extends PIXI.Container {
     this.sprite.x = size * this.column;
     this.sprite.y = size * this.row;
 
-    const offset = size * (this.AVAILABLE_AREA_PADDING_PERCENT / 100);
-    const borderThickness = Math.max(2, size * (this.BORDER_THICKNESS_PERCENT / 100));
-    const cornerRadius = size * (this.CORNER_RADIUS_PERCENT / 100);
-
     const currentAlpha = this.availibleArea.alpha;
 
     this.removeChild(this.availibleArea);
 
-    const border = new PIXI.Graphics()
-      .lineStyle(borderThickness, 0xffffff, 0.3)
-      .drawRoundedRect(0 + offset / 2, 0 + offset / 2, size - offset, size - offset, cornerRadius);
-
-    this.availibleArea = new PIXI.Graphics();
-    this.availibleArea.beginFill(0xffffff, 0.5);
-    this.availibleArea.drawRoundedRect(
-      0 + offset / 2,
-      0 + offset / 2,
-      size - offset,
-      size - offset,
-      cornerRadius,
-    );
-    this.availibleArea.endFill();
-    this.availibleArea.addChild(border);
+    this.availibleArea = this.createAvailibleArea(size);
     this.availibleArea.x = size * this.column;
     this.availibleArea.y = size * this.row;
 

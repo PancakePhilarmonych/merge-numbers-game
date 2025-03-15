@@ -118,7 +118,7 @@ export class GameObject extends PIXI.Container {
     const height = size - offset;
     const radius = size * 0.05;
     const border = new PIXI.Graphics()
-      .lineStyle(Math.max(3, size * 0.01), color, 1) // Толщина линии не менее 2px
+      .lineStyle(6, color, 1)
       .drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
 
     const graphics = new PIXI.Graphics();
@@ -138,7 +138,7 @@ export class GameObject extends PIXI.Container {
     const height = size - offset;
     const radius = size * 0.05;
     const border = new PIXI.Graphics()
-      .lineStyle(Math.max(4, size * 0.02), color, 0.4)
+      .lineStyle(6, color, 0.4)
       .drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
 
     const graphics = new PIXI.Graphics();
