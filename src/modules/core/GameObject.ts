@@ -99,14 +99,19 @@ export class GameObject extends PIXI.Container {
     this.levelText.text = this.getLevel();
   }
 
-  private createGameObjectGraphics(size: number, offset = 80, color = '0xffffff') {
+  private createGameObjectGraphics(size: number, offset = 70, color = '0xffffff') {
+    const xStartPosition = 0 + offset / 2;
+    const yStartPosition = 0 + offset / 2;
+    const width = size - offset;
+    const height = size - offset;
+    const radius = 15;
     const border = new PIXI.Graphics()
       .lineStyle(5, color, 1)
-      .drawRoundedRect(0 + offset / 2, 0 + offset / 2, size - offset, size - offset, 15);
+      .drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
 
     const graphics = new PIXI.Graphics();
     graphics.beginFill(getHexColorByColor(this.color));
-    graphics.drawRoundedRect(0 + offset / 2, 0 + offset / 2, size - offset, size - offset, 15);
+    graphics.drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
     graphics.endFill();
     graphics.addChild(border);
 
@@ -115,13 +120,18 @@ export class GameObject extends PIXI.Container {
   }
 
   private createSelectionGraphics(size: number, offset = 80, color = '0xffffff') {
+    const xStartPosition = 0 + offset / 2;
+    const yStartPosition = 0 + offset / 2;
+    const width = size - offset;
+    const height = size - offset;
+    const radius = 15;
     const border = new PIXI.Graphics()
       .lineStyle(10, color, 0.4)
-      .drawRoundedRect(0 + offset / 2, 0 + offset / 2, size - offset, size - offset, 15);
+      .drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
 
     const graphics = new PIXI.Graphics();
     graphics.beginFill(color, 0.6);
-    graphics.drawRoundedRect(0 + offset / 2, 0 + offset / 2, size - offset, size - offset, 15);
+    graphics.drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
     graphics.endFill();
     graphics.addChild(border);
 
