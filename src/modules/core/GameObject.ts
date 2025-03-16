@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import Cell from '@/modules/core/Cell';
 import { Colors, getHexColorByColor } from '@/utils';
+import { createSqareGraphics } from '@/utils/graphics';
 
 export class GameObject extends PIXI.Container {
   private color: Colors;
@@ -29,8 +30,22 @@ export class GameObject extends PIXI.Container {
     const objectOffset = size * (this.OBJECT_PADDING_PERCENT / 100);
     const selectionOffset = size * (this.SELECTION_PADDING_PERCENT / 100);
 
-    this.sprite = this.createGameObjectGraphics(size, objectOffset);
-    this.selection = this.createSelectionGraphics(size, selectionOffset);
+    this.sprite = createSqareGraphics({
+      size,
+      offset: objectOffset,
+      color: getHexColorByColor(this.color),
+      radius: size * 0.05,
+      borderSize: (size / 100) * 4,
+    });
+
+    this.selection = createSqareGraphics({
+      size,
+      offset: selectionOffset,
+      color: 0xffffff,
+      transparentType: 'medium',
+      radius: size * 0.05,
+      borderSize: (size / 100) * 4,
+    });
 
     this.selection.alpha = 0;
     this.selection.zIndex = 2;
@@ -111,46 +126,6 @@ export class GameObject extends PIXI.Container {
     this.levelText.text = this.getLevel();
   }
 
-  private createGameObjectGraphics(size: number, offset: number, color = '0xffffff') {
-    const xStartPosition = 0 + offset / 2;
-    const yStartPosition = 0 + offset / 2;
-    const width = size - offset;
-    const height = size - offset;
-    const radius = size * 0.05;
-    const border = new PIXI.Graphics()
-      .lineStyle(6, color, 1)
-      .drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
-
-    const graphics = new PIXI.Graphics();
-    graphics.beginFill(getHexColorByColor(this.color));
-    graphics.drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
-    graphics.endFill();
-    graphics.addChild(border);
-
-    graphics.zIndex = 2;
-    return graphics;
-  }
-
-  private createSelectionGraphics(size: number, offset: number, color = '0xffffff') {
-    const xStartPosition = 0 + offset / 2;
-    const yStartPosition = 0 + offset / 2;
-    const width = size - offset;
-    const height = size - offset;
-    const radius = size * 0.05;
-    const border = new PIXI.Graphics()
-      .lineStyle(6, color, 0.4)
-      .drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
-
-    const graphics = new PIXI.Graphics();
-    graphics.beginFill(color, 0.6);
-    graphics.drawRoundedRect(xStartPosition, yStartPosition, width, height, radius);
-    graphics.endFill();
-    graphics.addChild(border);
-
-    graphics.zIndex = 0;
-    return graphics;
-  }
-
   public updateSize(size: number) {
     this.x = this.cell.x * size;
     this.y = this.cell.y * size;
@@ -161,8 +136,22 @@ export class GameObject extends PIXI.Container {
     this.removeChild(this.sprite);
     this.removeChild(this.selection);
 
-    this.sprite = this.createGameObjectGraphics(size, objectOffset);
-    this.selection = this.createSelectionGraphics(size, selectionOffset);
+    this.sprite = createSqareGraphics({
+      size,
+      offset: objectOffset,
+      color: getHexColorByColor(this.color),
+      radius: size * 0.05,
+      borderSize: (size / 100) * 4,
+    });
+
+    this.selection = createSqareGraphics({
+      size,
+      offset: selectionOffset,
+      color: 0xffffff,
+      transparentType: 'medium',
+      radius: size * 0.05,
+      borderSize: (size / 100) * 4,
+    });
 
     this.selection.alpha = 0;
     this.selection.zIndex = 2;
