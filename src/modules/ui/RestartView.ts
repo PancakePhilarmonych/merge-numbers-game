@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+import { createSqareGraphics } from '@/utils/graphics';
 
 export default class RestartView extends PIXI.Container {
   public container: PIXI.Container;
@@ -10,19 +11,16 @@ export default class RestartView extends PIXI.Container {
     this.container.width = size;
     this.container.height = size;
 
-    this.container.addChild(this.createPauseBackground(size));
+    this.container.addChild(
+      createSqareGraphics({
+        size,
+        color: 0xff7675,
+        transparentType: 'low',
+      }),
+    );
     this.container.addChild(this.createRestartButton(size));
     this.container.addChild(this.createRestartText());
     this.container.visible = false;
-  }
-
-  private createPauseBackground(size: number) {
-    const pauseBackground = new PIXI.Graphics();
-    pauseBackground.beginFill(0xff7675, 0.9);
-    pauseBackground.drawRect(0, 0, size, size);
-    pauseBackground.endFill();
-
-    return pauseBackground;
   }
 
   private createRestartButton(size: number) {
@@ -33,7 +31,7 @@ export default class RestartView extends PIXI.Container {
     const restartButton = new PIXI.Container();
 
     const border = new PIXI.Graphics()
-      .lineStyle(6, 0xffffff, 1)
+      .lineStyle(size / 100, 0xffffff, 1)
       .drawRoundedRect(0, 0, buttonWidth, buttonHeight, radius);
 
     restartButton.addChild(border);
@@ -118,5 +116,27 @@ export default class RestartView extends PIXI.Container {
     this.container.visible = false;
   }
 
-  public resize(): void {}
+  public resize(newSize: number): void {
+    const bestScoreText = this.container.children[3] as PIXI.Text;
+    const scoreText = this.container.children[4] as PIXI.Text;
+    const hasBestScore = this.container.children.length > 3;
+
+    this.container.removeChildren();
+    this.container.addChild(
+      createSqareGraphics({
+        size: newSize,
+        color: 0xff7675,
+        transparentType: 'low',
+      }),
+    );
+    this.container.addChild(this.createRestartButton(newSize));
+    this.container.addChild(this.createRestartText());
+
+    if (hasBestScore) {
+      this.container.addChild(
+        this.createBestScoreText(parseInt(bestScoreText.text.split(' ')[2], 10)),
+      );
+      this.container.addChild(this.createScoreText(parseInt(scoreText.text.split(' ')[1], 10)));
+    }
+  }
 }

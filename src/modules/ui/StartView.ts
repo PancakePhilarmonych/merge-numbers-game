@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+import { createSqareGraphics } from '@/utils/graphics';
 
 export default class StartView {
   public container: PIXI.Container = new PIXI.Container();
@@ -8,17 +9,14 @@ export default class StartView {
     this.container.width = size;
     this.container.height = size;
 
-    this.container.addChild(this.createStartBackground(size));
+    this.container.addChild(
+      createSqareGraphics({
+        size,
+        color: 0x2ecc71,
+        transparentType: 'low',
+      }),
+    );
     this.container.addChild(this.createStartButton(size));
-  }
-
-  private createStartBackground(size: number) {
-    const startBackground = new PIXI.Graphics();
-    startBackground.beginFill(0x2ecc71, 0.9);
-    startBackground.drawRect(0, 0, size, size);
-    startBackground.endFill();
-
-    return startBackground;
   }
 
   public createStartButton(size: number) {
@@ -29,7 +27,7 @@ export default class StartView {
     const startButton = new PIXI.Container();
 
     const border = new PIXI.Graphics()
-      .lineStyle(6, 0xffffff, 1)
+      .lineStyle(size / 100, 0xffffff, 1)
       .drawRoundedRect(0, 0, buttonWidth, buttonHeight, radius);
 
     const buttonBackground = new PIXI.Graphics()
@@ -75,5 +73,15 @@ export default class StartView {
     this.container.visible = true;
   }
 
-  public resize(): void {}
+  public resize(newSize: number): void {
+    this.container.removeChildren();
+    this.container.addChild(
+      createSqareGraphics({
+        size: newSize,
+        color: 0x2ecc71,
+        transparentType: 'low',
+      }),
+    );
+    this.container.addChild(this.createStartButton(newSize));
+  }
 }

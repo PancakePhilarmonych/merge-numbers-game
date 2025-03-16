@@ -46,6 +46,7 @@ export default class GameManager {
     this.app.instance.stage.addChild(this.restartView.container);
 
     window.addEventListener('resize', () => this.resizeGrid());
+    window.addEventListener('orientationchange', () => this.resizeGrid());
   }
 
   private resizeGrid() {
@@ -54,8 +55,8 @@ export default class GameManager {
     this.app.instance.renderer.resize(newSize, newSize);
     this.app.instance.render();
     this.grid.updateSize(newSize);
-    this.startView.resize();
-    this.restartView.resize();
+    this.startView.resize(newSize);
+    this.restartView.resize(newSize);
   }
 
   private setMainContainer(): void {
