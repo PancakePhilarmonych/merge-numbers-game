@@ -25,7 +25,7 @@ export default class GameManager {
     this.setMainContainer();
     this.setListeners();
 
-    this.grid.generateGameObjects();
+    this.grid.generateGameObjects(this.grid.emptyCells);
 
     this.grid.gameObjects.forEach((gameObject: GameObject) => {
       this.app.container.addChild(gameObject);
@@ -301,7 +301,7 @@ export default class GameManager {
     this.selectedObject = null;
 
     this.store.reset();
-    this.grid.generateGameObjects();
+    this.grid.generateGameObjects(this.grid.emptyCells);
     this.grid.gameObjects.forEach((gameObject: GameObject) => {
       this.app.container.addChild(gameObject);
     });
