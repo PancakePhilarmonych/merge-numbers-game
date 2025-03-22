@@ -21,7 +21,6 @@ export default class GameManager {
   private startView: StartView;
 
   constructor() {
-    const size = getMaxAvailibleSideSize();
     this.setMainContainer();
     this.setListeners();
 
@@ -33,8 +32,8 @@ export default class GameManager {
     this.app.instance.stage.addChild(this.app.container);
     this.app.instance.stage.hitArea = this.app.instance.screen;
 
-    this.restartView = new RestartView(size);
-    this.startView = new StartView(size);
+    this.restartView = new RestartView();
+    this.startView = new StartView();
     this.startView.show();
     this.restartView.container.on('mg-restart', () => this.restartGame());
     this.startView.container.on('mg-start', () => {

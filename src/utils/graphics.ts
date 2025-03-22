@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 
-interface SqareGraphicsOptions {
+interface SqareOptions {
   size: number;
   color: PIXI.ColorSource;
   offset?: number;
@@ -8,6 +8,7 @@ interface SqareGraphicsOptions {
   borderSize?: number;
   transparentType?: 'low' | 'medium' | 'strong';
 }
+
 interface TextOptions {
   text: string;
   size: number;
@@ -26,7 +27,7 @@ const mainTransparencyMap = {
   strong: 0.3,
 };
 
-export function createSqareGraphics(options: SqareGraphicsOptions): PIXI.Graphics {
+export function createSqareGraphics(options: SqareOptions): PIXI.Graphics {
   const xStartPosition = options.offset ? 0 + options.offset / 2 : 0;
   const yStartPosition = options.offset ? 0 + options.offset / 2 : 0;
   const ofsettedSize = options.offset ? options.size - options.offset : options.size;
@@ -65,6 +66,7 @@ export function createSqareGraphics(options: SqareGraphicsOptions): PIXI.Graphic
 
   return graphics;
 }
+
 export function createText(options: TextOptions): PIXI.Text {
   return new PIXI.Text(options.text, {
     fontSize: options.size,

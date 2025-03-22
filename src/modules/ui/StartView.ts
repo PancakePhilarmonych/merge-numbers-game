@@ -1,22 +1,24 @@
 import * as PIXI from 'pixi.js';
 import { createSqareGraphics, createText } from '@/utils/graphics';
+import { getMaxAvailibleSideSize } from '@/utils';
 
 export default class StartView {
   public container: PIXI.Container = new PIXI.Container();
 
-  constructor(size: number) {
+  constructor() {
+    const sideSize = getMaxAvailibleSideSize();
     this.container.zIndex = 100;
-    this.container.width = size;
-    this.container.height = size;
+    this.container.width = sideSize;
+    this.container.height = sideSize;
 
     this.container.addChild(
       createSqareGraphics({
-        size,
+        size: sideSize,
         color: 0x2ecc71,
         transparentType: 'low',
       }),
     );
-    this.container.addChild(this.createStartButton(size));
+    this.container.addChild(this.createStartButton(sideSize));
   }
 
   public createStartButton(size: number) {

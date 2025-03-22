@@ -1,24 +1,26 @@
 import * as PIXI from 'pixi.js';
 import { createSqareGraphics, createText } from '@/utils/graphics';
+import { getMaxAvailibleSideSize } from '@/utils';
 
 export default class RestartView extends PIXI.Container {
   public container: PIXI.Container;
 
-  constructor(size: number) {
+  constructor() {
     super();
+    const sideSize = getMaxAvailibleSideSize();
     this.container = new PIXI.Container();
     this.container.zIndex = 100;
-    this.container.width = size;
-    this.container.height = size;
+    this.container.width = sideSize;
+    this.container.height = sideSize;
 
     this.container.addChild(
       createSqareGraphics({
-        size,
+        size: sideSize,
         color: 0xff7675,
         transparentType: 'low',
       }),
     );
-    this.container.addChild(this.createRestartButton(size));
+    this.container.addChild(this.createRestartButton(sideSize));
     this.container.addChild(this.createRestartText());
     this.container.visible = false;
   }
