@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import Cell from '@/modules/core/Cell';
 import { GameObject } from '@/modules/core/GameObject';
-import { Colors, getRandomColor } from '@/utils';
+import { Colors, getMaxAvailibleSideSize, getRandomColor } from '@/utils';
 const DEFAULT_GRID_SIZE = 5;
 
 export default class Grid {
@@ -9,10 +9,10 @@ export default class Grid {
   public gameObjects: GameObject[];
   public size: number;
 
-  constructor(size: number) {
+  constructor() {
     this.cells = [];
     this.gameObjects = [];
-    this.size = size / DEFAULT_GRID_SIZE;
+    this.size = getMaxAvailibleSideSize() / DEFAULT_GRID_SIZE;
 
     this.initRows(DEFAULT_GRID_SIZE);
   }

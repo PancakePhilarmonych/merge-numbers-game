@@ -11,7 +11,7 @@ import App from '@/modules/app/App';
 export default class GameManager {
   private app: App = new App();
   private store: Store = new Store();
-  private grid = new Grid(getMaxAvailibleSideSize());
+  private grid = new Grid();
 
   private availibleCells: Cell[] = [];
   private availibleForMerge: GameObject[] = [];
