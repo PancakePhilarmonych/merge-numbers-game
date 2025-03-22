@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { createSqareGraphics } from '@/utils/graphics';
+import { createSqareGraphics, createText } from '@/utils/graphics';
 
 export default class RestartView extends PIXI.Container {
   public container: PIXI.Container;
@@ -56,12 +56,9 @@ export default class RestartView extends PIXI.Container {
   }
 
   private createRestartText() {
-    const restartText = new PIXI.Text('Restart', {
-      fill: 0xffffff,
-      fontSize: 50,
-      fontFamily: 'Titan One',
-      fontWeight: 'normal',
-      align: 'center',
+    const restartText = createText({
+      text: 'Restart',
+      size: 50,
     });
 
     restartText.zIndex = 102;
@@ -72,11 +69,9 @@ export default class RestartView extends PIXI.Container {
   }
 
   private createScoreText(score: number) {
-    const scoreText = new PIXI.Text(`Score: ${score}`, {
-      fill: 0xffffff,
-      fontSize: 50,
-      fontFamily: 'Titan One',
-      align: 'center',
+    const scoreText = createText({
+      text: `Score: ${score}`,
+      size: 50,
     });
 
     scoreText.anchor.set(0.5);
@@ -87,11 +82,9 @@ export default class RestartView extends PIXI.Container {
   }
 
   private createBestScoreText(bestScore: number) {
-    const bestScoreText = new PIXI.Text(`Best score: ${bestScore}`, {
-      fill: 0xffffff,
-      fontSize: 30,
-      fontFamily: 'Titan One',
-      align: 'center',
+    const bestScoreText = createText({
+      text: `Best score: ${bestScore}`,
+      size: 30,
     });
 
     bestScoreText.anchor.set(0.5);

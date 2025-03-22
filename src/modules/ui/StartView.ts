@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { createSqareGraphics } from '@/utils/graphics';
+import { createSqareGraphics, createText } from '@/utils/graphics';
 
 export default class StartView {
   public container: PIXI.Container = new PIXI.Container();
@@ -38,12 +38,9 @@ export default class StartView {
     startButton.addChild(border);
     startButton.addChild(buttonBackground);
 
-    const startText = new PIXI.Text('Start', {
-      fill: 0xffffff,
-      fontSize: buttonHeight / 3,
-      fontWeight: 'bold',
-      fontFamily: 'Titan One',
-      align: 'center',
+    const startText = createText({
+      text: 'Start',
+      size: buttonHeight / 3,
     });
 
     startText.anchor.set(0.5);

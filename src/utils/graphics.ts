@@ -8,6 +8,11 @@ interface SqareGraphicsOptions {
   borderSize?: number;
   transparentType?: 'low' | 'medium' | 'strong';
 }
+interface TextOptions {
+  text: string;
+  size: number;
+  align?: 'center' | 'left' | 'right';
+}
 
 const borderTransparencyMap = {
   low: 0.8,
@@ -59,4 +64,12 @@ export function createSqareGraphics(options: SqareGraphicsOptions): PIXI.Graphic
   }
 
   return graphics;
+}
+export function createText(options: TextOptions): PIXI.Text {
+  return new PIXI.Text(options.text, {
+    fontSize: options.size,
+    fill: 0xffffff,
+    fontFamily: 'Titan One',
+    align: options.align || 'center',
+  });
 }

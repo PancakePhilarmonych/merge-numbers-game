@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import Cell from '@/modules/core/Cell';
 import { Colors, getHexColorByColor } from '@/utils';
-import { createSqareGraphics } from '@/utils/graphics';
+import { createSqareGraphics, createText } from '@/utils/graphics';
 
 export class GameObject extends PIXI.Container {
   private color: Colors;
@@ -53,11 +53,11 @@ export class GameObject extends PIXI.Container {
     this.eventMode = 'dynamic';
     this.cursor = 'pointer';
 
-    this.levelText = new PIXI.Text(this.getLevel(), {
-      fontSize: this.sprite.width / 3,
-      fontFamily: 'Titan One',
-      fill: 0xffffff,
+    this.levelText = createText({
+      text: String(this.getLevel()),
+      size: this.sprite.width / 3,
     });
+
     this.levelText.eventMode = 'none';
 
     this.positionLevelText(size, objectOffset);
