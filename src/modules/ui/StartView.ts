@@ -1,24 +1,24 @@
 import * as PIXI from 'pixi.js';
+import { createSqareGraphics, createText } from '@/utils/graphics';
+import { getMaxAvailibleSideSize } from '@/utils';
 
 export default class StartView {
   public container: PIXI.Container = new PIXI.Container();
 
-  constructor(size: number) {
+  constructor() {
+    const sideSize = getMaxAvailibleSideSize();
     this.container.zIndex = 100;
-    this.container.width = size;
-    this.container.height = size;
+    this.container.width = sideSize;
+    this.container.height = sideSize;
 
-    this.container.addChild(this.createStartBackground(size));
-    this.container.addChild(this.createStartButton(size));
-  }
-
-  private createStartBackground(size: number) {
-    const startBackground = new PIXI.Graphics();
-    startBackground.beginFill(0x2ecc71, 0.9);
-    startBackground.drawRect(0, 0, size, size);
-    startBackground.endFill();
-
-    return startBackground;
+    this.container.addChild(
+      createSqareGraphics({
+        size: sideSize,
+        color: 0x2ecc71,
+        transparentType: 'low',
+      }),
+    );
+    this.container.addChild(this.createStartButton(sideSize));
   }
 
   public createStartButton(size: number) {
@@ -29,7 +29,7 @@ export default class StartView {
     const startButton = new PIXI.Container();
 
     const border = new PIXI.Graphics()
-      .lineStyle(6, 0xffffff, 1)
+      .lineStyle(size / 100, 0xffffff, 1)
       .drawRoundedRect(0, 0, buttonWidth, buttonHeight, radius);
 
     const buttonBackground = new PIXI.Graphics()
@@ -40,12 +40,9 @@ export default class StartView {
     startButton.addChild(border);
     startButton.addChild(buttonBackground);
 
-    const startText = new PIXI.Text('Start', {
-      fill: 0xffffff,
-      fontSize: buttonHeight / 3,
-      fontWeight: 'bold',
-      fontFamily: 'Titan One',
-      align: 'center',
+    const startText = createText({
+      text: 'Start',
+      size: buttonHeight / 3,
     });
 
     startText.anchor.set(0.5);
@@ -75,5 +72,15 @@ export default class StartView {
     this.container.visible = true;
   }
 
-  public resize(): void {}
+  public resize(newSize: number): void {
+    this.container.removeChildren();
+    this.container.addChild(
+      createSqareGraphics({
+        size: newSize,
+        color: 0x2ecc71,
+        transparentType: 'low',
+      }),
+    );
+    this.container.addChild(this.createStartButton(newSize));
+  }
 }

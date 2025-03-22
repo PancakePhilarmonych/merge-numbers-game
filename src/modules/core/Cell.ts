@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import EmptyField from '@/assets/sprites/grass-tile.png';
 import EmptyFieldSecond from '@/assets/sprites/grass-tile-second.png';
 import { GameObject } from '@/modules/core/GameObject';
+import { createSqareGraphics } from '@/utils/graphics';
 
 export default class Cell extends PIXI.Container {
   public sprite: PIXI.Sprite;
@@ -32,7 +33,15 @@ export default class Cell extends PIXI.Container {
     this.sprite.y = size * y;
     this.sprite.zIndex = 1;
 
-    this.availibleArea = this.createAvailibleArea(size);
+    this.availibleArea = createSqareGraphics({
+      size,
+      color: 0xffffff,
+      offset: size * (this.AVAILABLE_AREA_PADDING_PERCENT / 100),
+      radius: size * 0.05,
+      borderSize: (size / 100) * 4,
+      transparentType: 'strong',
+    });
+
     this.availibleArea.x = size * x;
     this.availibleArea.y = size * y;
     this.availibleArea.alpha = 0;
@@ -40,29 +49,6 @@ export default class Cell extends PIXI.Container {
 
     this.addChild(this.sprite);
     this.addChild(this.availibleArea);
-  }
-
-  private createAvailibleArea(size: number): PIXI.Graphics {
-    const offset = size * (this.AVAILABLE_AREA_PADDING_PERCENT / 100);
-    const cornerRadius = size * (this.CORNER_RADIUS_PERCENT / 100);
-
-    const border = new PIXI.Graphics()
-      .lineStyle(6, 0xffffff, 0.3)
-      .drawRoundedRect(0 + offset / 2, 0 + offset / 2, size - offset, size - offset, cornerRadius);
-
-    const availibleArea = new PIXI.Graphics();
-    availibleArea.beginFill(0xffffff, 0.5);
-    availibleArea.drawRoundedRect(
-      0 + offset / 2,
-      0 + offset / 2,
-      size - offset,
-      size - offset,
-      cornerRadius,
-    );
-    availibleArea.endFill();
-    availibleArea.addChild(border);
-
-    return availibleArea;
   }
 
   get x() {
@@ -105,7 +91,14 @@ export default class Cell extends PIXI.Container {
 
     this.removeChild(this.availibleArea);
 
-    this.availibleArea = this.createAvailibleArea(size);
+    this.availibleArea = createSqareGraphics({
+      size,
+      color: 0xffffff,
+      offset: size * (this.AVAILABLE_AREA_PADDING_PERCENT / 100),
+      radius: size * 0.05,
+      borderSize: (size / 100) * 4,
+      transparentType: 'strong',
+    });
     this.availibleArea.x = size * this.column;
     this.availibleArea.y = size * this.row;
 

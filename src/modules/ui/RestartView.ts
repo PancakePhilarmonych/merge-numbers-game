@@ -1,28 +1,28 @@
 import * as PIXI from 'pixi.js';
+import { createSqareGraphics, createText } from '@/utils/graphics';
+import { getMaxAvailibleSideSize } from '@/utils';
 
 export default class RestartView extends PIXI.Container {
   public container: PIXI.Container;
 
-  constructor(size: number) {
+  constructor() {
     super();
+    const sideSize = getMaxAvailibleSideSize();
     this.container = new PIXI.Container();
     this.container.zIndex = 100;
-    this.container.width = size;
-    this.container.height = size;
+    this.container.width = sideSize;
+    this.container.height = sideSize;
 
-    this.container.addChild(this.createPauseBackground(size));
-    this.container.addChild(this.createRestartButton(size));
+    this.container.addChild(
+      createSqareGraphics({
+        size: sideSize,
+        color: 0xff7675,
+        transparentType: 'low',
+      }),
+    );
+    this.container.addChild(this.createRestartButton(sideSize));
     this.container.addChild(this.createRestartText());
     this.container.visible = false;
-  }
-
-  private createPauseBackground(size: number) {
-    const pauseBackground = new PIXI.Graphics();
-    pauseBackground.beginFill(0xff7675, 0.9);
-    pauseBackground.drawRect(0, 0, size, size);
-    pauseBackground.endFill();
-
-    return pauseBackground;
   }
 
   private createRestartButton(size: number) {
@@ -33,7 +33,7 @@ export default class RestartView extends PIXI.Container {
     const restartButton = new PIXI.Container();
 
     const border = new PIXI.Graphics()
-      .lineStyle(6, 0xffffff, 1)
+      .lineStyle(size / 100, 0xffffff, 1)
       .drawRoundedRect(0, 0, buttonWidth, buttonHeight, radius);
 
     restartButton.addChild(border);
@@ -58,12 +58,9 @@ export default class RestartView extends PIXI.Container {
   }
 
   private createRestartText() {
-    const restartText = new PIXI.Text('Restart', {
-      fill: 0xffffff,
-      fontSize: 50,
-      fontFamily: 'Titan One',
-      fontWeight: 'normal',
-      align: 'center',
+    const restartText = createText({
+      text: 'Restart',
+      size: 50,
     });
 
     restartText.zIndex = 102;
@@ -74,11 +71,9 @@ export default class RestartView extends PIXI.Container {
   }
 
   private createScoreText(score: number) {
-    const scoreText = new PIXI.Text(`Score: ${score}`, {
-      fill: 0xffffff,
-      fontSize: 50,
-      fontFamily: 'Titan One',
-      align: 'center',
+    const scoreText = createText({
+      text: `Score: ${score}`,
+      size: 50,
     });
 
     scoreText.anchor.set(0.5);
@@ -89,11 +84,9 @@ export default class RestartView extends PIXI.Container {
   }
 
   private createBestScoreText(bestScore: number) {
-    const bestScoreText = new PIXI.Text(`Best score: ${bestScore}`, {
-      fill: 0xffffff,
-      fontSize: 30,
-      fontFamily: 'Titan One',
-      align: 'center',
+    const bestScoreText = createText({
+      text: `Best score: ${bestScore}`,
+      size: 30,
     });
 
     bestScoreText.anchor.set(0.5);
@@ -118,5 +111,27 @@ export default class RestartView extends PIXI.Container {
     this.container.visible = false;
   }
 
-  public resize(): void {}
+  public resize(newSize: number): void {
+    const bestScoreText = this.container.children[3] as PIXI.Text;
+    const scoreText = this.container.children[4] as PIXI.Text;
+    const hasBestScore = this.container.children.length > 3;
+
+    this.container.removeChildren();
+    this.container.addChild(
+      createSqareGraphics({
+        size: newSize,
+        color: 0xff7675,
+        transparentType: 'low',
+      }),
+    );
+    this.container.addChild(this.createRestartButton(newSize));
+    this.container.addChild(this.createRestartText());
+
+    if (hasBestScore) {
+      this.container.addChild(
+        this.createBestScoreText(parseInt(bestScoreText.text.split(' ')[2], 10)),
+      );
+      this.container.addChild(this.createScoreText(parseInt(scoreText.text.split(' ')[1], 10)));
+    }
+  }
 }
