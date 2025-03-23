@@ -34,12 +34,12 @@ export default class GameManager {
   }
 
   private resize() {
-    const newSize = getMaxAvailibleSideSize();
+    const size = getMaxAvailibleSideSize();
 
-    this.app.resize(newSize, newSize);
-    this.grid.resize(newSize);
-    this.startView.resize(newSize);
-    this.restartView.resize(newSize);
+    this.app.resize(size);
+    this.grid.resize(size);
+    this.startView.resize(size);
+    this.restartView.resize(size);
   }
 
   private setListeners(): void {

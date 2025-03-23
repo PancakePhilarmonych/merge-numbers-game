@@ -35,8 +35,8 @@ export default class App {
     this.instance.stage.addChild(container);
   }
 
-  public resize(width: number, height: number) {
-    this.instance.renderer.resize(width, height);
+  public resize(size: number) {
+    this.instance.renderer.resize(size, size);
     this.instance.render();
   }
 
