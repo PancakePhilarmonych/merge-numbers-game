@@ -126,7 +126,7 @@ export class GameObject extends PIXI.Container {
     this.levelText.text = this.getLevel();
   }
 
-  public updateSize(size: number) {
+  public resize(size: number) {
     this.x = this.cell.x * size;
     this.y = this.cell.y * size;
 

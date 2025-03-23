@@ -112,6 +112,7 @@ export default class RestartView extends PIXI.Container {
   }
 
   public resize(newSize: number): void {
+    console.log('RestartView -> resize -> newSize', newSize);
     const bestScoreText = this.container.children[3] as PIXI.Text;
     const scoreText = this.container.children[4] as PIXI.Text;
     const hasBestScore = this.container.children.length > 3;

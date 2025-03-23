@@ -21,49 +21,29 @@ export default class GameManager {
   private startView: StartView;
 
   constructor() {
-    this.setMainContainer();
-    this.setListeners();
-
     this.grid.generateGameObjects(this.grid.emptyCells);
 
-    this.grid.gameObjects.forEach((gameObject: GameObject) => {
-      this.app.container.addChild(gameObject);
-    });
-    this.app.instance.stage.addChild(this.app.container);
-    this.app.instance.stage.hitArea = this.app.instance.screen;
+    this.app.addToContainer(this.grid.gameObjects);
+    this.app.addToContainer(this.grid.cellsContainers);
 
     this.restartView = new RestartView();
     this.startView = new StartView();
-    this.startView.show();
-    this.restartView.container.on('mg-restart', () => this.restartGame());
-    this.startView.container.on('mg-start', () => {
-      this.startView.hide();
-      this.startGame();
-    });
+    this.setListeners();
 
-    this.app.instance.stage.addChild(this.startView.container);
-    this.app.instance.stage.addChild(this.restartView.container);
+    this.app.addToStage(this.startView.container);
+    this.app.addToStage(this.restartView.container);
 
-    window.addEventListener('resize', () => this.resizeGrid());
-    window.addEventListener('orientationchange', () => this.resizeGrid());
+    window.addEventListener('resize', () => this.resize());
+    window.addEventListener('orientationchange', () => this.resize());
   }
 
-  private resizeGrid() {
+  private resize() {
     const newSize = getMaxAvailibleSideSize();
 
-    this.app.instance.renderer.resize(newSize, newSize);
-    this.app.instance.render();
-    this.grid.updateSize(newSize);
+    this.app.resize(newSize, newSize);
+    this.grid.resize(newSize);
     this.startView.resize(newSize);
     this.restartView.resize(newSize);
-  }
-
-  private setMainContainer(): void {
-    this.app.container.eventMode = 'dynamic';
-    this.app.container.sortableChildren = true;
-    this.app.container.interactiveChildren = true;
-    this.app.container.eventMode = 'none';
-    this.app.container.addChild(...this.grid.cellsContainers);
   }
 
   private setListeners(): void {
@@ -85,6 +65,12 @@ export default class GameManager {
     this.app.container.on<any>('deselect', () => {
       if (!this.selectedObject) return;
       this.selectedObject = null;
+    });
+
+    this.restartView.container.on('mg-restart', () => this.restartGame());
+    this.startView.container.on('mg-start', () => {
+      this.startView.hide();
+      this.startGame();
     });
   }
 
@@ -329,6 +315,10 @@ export default class GameManager {
           this.app.container.removeAllListeners();
           this.selectedObject = null;
         }
+
+        this.grid.gameObjects.forEach((gameObject: GameObject) => {
+          gameObject.eventMode = 'none';
+        });
 
         this.app.instance.ticker.stop();
       }

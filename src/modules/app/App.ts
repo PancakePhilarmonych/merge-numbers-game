@@ -16,5 +16,34 @@ export default class App {
       width: size,
       height: size,
     });
+
+    this.instance.stage.addChild(this.container);
+    this.initAppContainer();
+  }
+
+  public addToContainer(container: PIXI.Container | PIXI.Container[]) {
+    const isContainerArray = Array.isArray(container);
+
+    if (isContainerArray) {
+      this.container.addChild(...container);
+    } else {
+      this.container.addChild(container);
+    }
+  }
+
+  public addToStage(container: PIXI.Container) {
+    this.instance.stage.addChild(container);
+  }
+
+  public resize(width: number, height: number) {
+    this.instance.renderer.resize(width, height);
+    this.instance.render();
+  }
+
+  private initAppContainer(): void {
+    this.instance.stage.hitArea = this.instance.screen;
+    this.container.sortableChildren = true;
+    this.container.interactiveChildren = true;
+    this.container.eventMode = 'none';
   }
 }

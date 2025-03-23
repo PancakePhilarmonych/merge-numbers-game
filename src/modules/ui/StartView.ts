@@ -19,6 +19,8 @@ export default class StartView {
       }),
     );
     this.container.addChild(this.createStartButton(sideSize));
+
+    this.show();
   }
 
   public createStartButton(size: number) {

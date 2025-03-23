@@ -66,13 +66,13 @@ export default class Grid {
     }
   }
 
-  public updateSize(newSize: number) {
+  public resize(newSize: number) {
     this.size = newSize / DEFAULT_GRID_SIZE;
 
     for (let row = 0; row < DEFAULT_GRID_SIZE; row++) {
       for (let col = 0; col < DEFAULT_GRID_SIZE; col++) {
         const cell = this.cells[row][col];
-        cell.updateSize(this.size);
+        cell.resize(this.size);
       }
     }
   }
