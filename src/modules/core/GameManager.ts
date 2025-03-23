@@ -273,22 +273,13 @@ export default class GameManager {
   public restartGame(): void {
     this.cleanSteps();
 
-    this.grid.gameObjects.forEach((gameObject: GameObject) => {
-      gameObject.destroy();
-    });
-
-    this.selectedObject = null;
-
-    this.grid.gameObjects = [];
-    this.grid.cleanAllCells();
+    this.grid.clean();
 
     this.selectedObject = null;
 
     this.store.reset();
     this.grid.generateGameObjects(this.grid.emptyCells);
-    this.grid.gameObjects.forEach((gameObject: GameObject) => {
-      this.app.container.addChild(gameObject);
-    });
+    this.app.addToContainer(this.grid.gameObjects);
     this.app.container.eventMode = 'dynamic';
     this.restartView.hide();
     this.pause = false;

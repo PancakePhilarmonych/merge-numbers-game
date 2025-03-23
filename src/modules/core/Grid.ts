@@ -32,6 +32,19 @@ export default class Grid {
     return this.cells?.[x]?.[y] ?? null;
   }
 
+  public clean() {
+    this.destroyGameObjects();
+    this.cleanAllCells();
+  }
+
+  private destroyGameObjects() {
+    this.gameObjects.forEach((gameObject: GameObject) => {
+      gameObject.destroy();
+    });
+
+    this.gameObjects = [];
+  }
+
   public cleanAllCells(): void {
     this.cells.forEach(row =>
       row.forEach(cell => {
