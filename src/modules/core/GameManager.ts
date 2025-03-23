@@ -21,20 +21,16 @@ export default class GameManager {
   private startView: StartView;
 
   constructor() {
-    this.grid.generateGameObjects(this.grid.emptyCells);
-
-    this.app.addToContainer(this.grid.gameObjects);
-    this.app.addToContainer(this.grid.cellsContainers);
-
     this.restartView = new RestartView();
     this.startView = new StartView();
-    this.setListeners();
 
+    this.grid.generateGameObjects(this.grid.emptyCells);
+    this.app.addToContainer(this.grid.gameObjects);
+    this.app.addToContainer(this.grid.cellsContainers);
     this.app.addToStage(this.startView.container);
     this.app.addToStage(this.restartView.container);
 
-    window.addEventListener('resize', () => this.resize());
-    window.addEventListener('orientationchange', () => this.resize());
+    this.setListeners();
   }
 
   private resize() {
@@ -72,6 +68,9 @@ export default class GameManager {
       this.startView.hide();
       this.startGame();
     });
+
+    window.addEventListener('resize', () => this.resize());
+    window.addEventListener('orientationchange', () => this.resize());
   }
 
   private getAvailibleCellsAround(gameObject: GameObject): void {
