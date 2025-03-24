@@ -78,29 +78,30 @@ export default class GameManager {
 
     const cells = this.grid.flatCells;
     const gameObjectCell = gameObject.getCell();
-    const gameObjectX = gameObjectCell!.x;
-    const gameObjectY = gameObjectCell!.y;
+    const gameObjectX = gameObjectCell.x;
+    const gameObjectY = gameObjectCell.y;
 
     cells.forEach((cell: Cell) => {
+      const hasGameObject = cell.getGameObject();
+      const sameColor = hasGameObject?.getColor() === gameObject.getColor();
+      const sameLevel = hasGameObject?.level === gameObject.level;
+      const isEmpty = !hasGameObject;
+
       const x = cell.x;
       const y = cell.y;
+
       const isAround =
         (x === gameObjectX && y === gameObjectY - 1) ||
         (x === gameObjectX && y === gameObjectY + 1) ||
         (x === gameObjectX - 1 && y === gameObjectY) ||
         (x === gameObjectX + 1 && y === gameObjectY);
 
-      if (isAround && !cell.getGameObject()) {
+      if (isAround && isEmpty) {
         this.availibleCells.push(cell);
       }
 
-      if (
-        isAround &&
-        cell.getGameObject() &&
-        cell.getGameObject()!.getColor() === gameObject.getColor() &&
-        cell.getGameObject()!.level === gameObject.level
-      ) {
-        this.availibleForMerge.push(cell.getGameObject()!);
+      if (isAround && sameColor && sameLevel) {
+        this.availibleForMerge.push(hasGameObject);
         this.availibleCells.push(cell);
       }
     });
