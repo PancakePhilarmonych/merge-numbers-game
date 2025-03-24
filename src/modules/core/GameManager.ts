@@ -55,6 +55,7 @@ export default class GameManager {
       if (this.selectedObject === go) return;
       if (this.selectedObject) this.selectedObject.selection.alpha = 0;
       this.selectedObject = go;
+      this.cleanSteps();
       this.getAvailibleCellsAround(go);
     });
 
@@ -73,35 +74,27 @@ export default class GameManager {
     window.addEventListener('orientationchange', () => this.resize());
   }
 
-  private getAvailibleCellsAround(gameObject: GameObject): void {
-    this.cleanSteps();
+  private getAvailibleCellsAround(checkedGameObject: GameObject): void {
+    const gameObjectCell = checkedGameObject.getCell();
+    const up = this.grid.getCell(gameObjectCell.x, gameObjectCell.y + 1);
+    const down = this.grid.getCell(gameObjectCell.x, gameObjectCell.y - 1);
+    const left = this.grid.getCell(gameObjectCell.x + 1, gameObjectCell.y);
+    const right = this.grid.getCell(gameObjectCell.x - 1, gameObjectCell.y);
 
-    const cells = this.grid.flatCells;
-    const gameObjectCell = gameObject.getCell();
-    const gameObjectX = gameObjectCell.x;
-    const gameObjectY = gameObjectCell.y;
+    const surroundingCells = [up, down, left, right].filter(cell => cell !== null);
 
-    cells.forEach((cell: Cell) => {
-      const hasGameObject = cell.getGameObject();
-      const sameColor = hasGameObject?.getColor() === gameObject.getColor();
-      const sameLevel = hasGameObject?.level === gameObject.level;
-      const isEmpty = !hasGameObject;
+    surroundingCells.forEach((cell: Cell) => {
+      const gameObject = cell.getGameObject();
+      const sameColor = gameObject?.getColor() === checkedGameObject.getColor();
+      const sameLevel = gameObject?.level === checkedGameObject.level;
+      const isEmpty = gameObject === null;
 
-      const x = cell.x;
-      const y = cell.y;
-
-      const isAround =
-        (x === gameObjectX && y === gameObjectY - 1) ||
-        (x === gameObjectX && y === gameObjectY + 1) ||
-        (x === gameObjectX - 1 && y === gameObjectY) ||
-        (x === gameObjectX + 1 && y === gameObjectY);
-
-      if (isAround && isEmpty) {
+      if (isEmpty) {
         this.availibleCells.push(cell);
       }
 
-      if (isAround && sameColor && sameLevel) {
-        this.availibleForMerge.push(hasGameObject);
+      if (sameColor && sameLevel) {
+        this.availibleForMerge.push(gameObject);
         this.availibleCells.push(cell);
       }
     });
@@ -109,7 +102,7 @@ export default class GameManager {
     this.availibleForMerge.forEach((go: GameObject) => {
       go.setAvailibleForMerge();
       go.on('pointerdown', () => {
-        this.setObjectToCell(gameObject, go.getCell()!);
+        this.setObjectToCell(checkedGameObject, go.getCell());
       });
     });
 
@@ -120,7 +113,7 @@ export default class GameManager {
       cell.eventMode = 'dynamic';
       cell.cursor = 'pointer';
       cell.on('pointerdown', () => {
-        this.setObjectToCell(gameObject, cell);
+        this.setObjectToCell(checkedGameObject, cell);
       });
     });
   }
@@ -190,6 +183,8 @@ export default class GameManager {
         this.addNewObject(randomEmptyCell, getRandomColor(true));
       }, 500);
     }
+
+    this.cleanSteps();
     this.getAvailibleCellsAround(object);
 
     this.selectedObject.selection.alpha = 0;
@@ -246,6 +241,7 @@ export default class GameManager {
       }, 500);
     }
 
+    this.cleanSteps();
     this.getAvailibleCellsAround(cellGameObject!);
 
     this.selectedObject.selection.alpha = 0;

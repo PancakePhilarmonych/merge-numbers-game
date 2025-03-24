@@ -29,7 +29,7 @@ export default class Grid {
   }
 
   public getCell(x: number, y: number): Cell | null {
-    return this.cells?.[x]?.[y] ?? null;
+    return this.cells?.[y]?.[x] ?? null;
   }
 
   public clean() {
