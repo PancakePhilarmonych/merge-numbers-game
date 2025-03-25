@@ -59,11 +59,6 @@ export default class GameManager {
       this.getAvailibleCellsAround(go);
     });
 
-    this.app.container.on<any>('deselect', () => {
-      if (!this.selectedObject) return;
-      this.selectedObject = null;
-    });
-
     this.restartView.container.on('mg-restart', () => this.restartGame());
     this.startView.container.on('mg-start', () => {
       this.startView.hide();
@@ -75,6 +70,7 @@ export default class GameManager {
   }
 
   private getAvailibleCellsAround(checkedGameObject: GameObject): void {
+    //TODO: write getSurroundingsCells function
     const gameObjectCell = checkedGameObject.getCell();
     const up = this.grid.getCell(gameObjectCell.x, gameObjectCell.y + 1);
     const down = this.grid.getCell(gameObjectCell.x, gameObjectCell.y - 1);
@@ -84,6 +80,7 @@ export default class GameManager {
     const surroundingCells = [up, down, left, right].filter(cell => cell !== null);
 
     surroundingCells.forEach((cell: Cell) => {
+      // TODO: Write surrounding cells handler
       const gameObject = cell.getGameObject();
       const sameColor = gameObject?.getColor() === checkedGameObject.getColor();
       const sameLevel = gameObject?.level === checkedGameObject.level;
