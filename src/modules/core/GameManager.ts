@@ -166,20 +166,14 @@ export default class GameManager {
 
     object.selection.alpha = 0;
     object.selection.zIndex = 1;
-    object.getCell()!.removeGameObject();
+    object.getCell().removeGameObject();
     cell.setGameObject(object);
     smoothMoveTo(object, cellX, cellY, 0.5);
     object.setCell(cell);
     this.selectedObject = object;
 
     this.cleanSteps();
-    const randomEmptyCell = this.grid.getRandomEmptyCell();
-
-    if (randomEmptyCell) {
-      setTimeout(() => {
-        this.addNewObject(randomEmptyCell, getRandomColor(true));
-      }, 500);
-    }
+    this.addNewObjectToRandomCell();
 
     this.cleanSteps();
     this.getAvailibleCellsAround(object);
@@ -187,6 +181,17 @@ export default class GameManager {
     this.selectedObject.selection.alpha = 0;
     this.selectedObject = null;
     this.cleanSteps();
+  }
+
+  addNewObjectToRandomCell(): void {
+    // MAYBE I HAVE TO USE THIS FUNCTION TO DEFINE THE END OF THE GAME ????
+    const randomEmptyCell = this.grid.getRandomEmptyCell();
+
+    if (randomEmptyCell) {
+      setTimeout(() => {
+        this.addNewObject(randomEmptyCell, getRandomColor(true));
+      }, 300);
+    }
   }
 
   moveObjectToOwnCell(object: GameObject): void {
