@@ -62,7 +62,9 @@ export function resizeRoot(app: PIXI.Application<HTMLCanvasElement>) {
 }
 
 export const getMaxAvailibleSideSize = () => {
-  const padding = 24;
-  const sideSize = window.innerWidth > window.innerHeight ? window.innerHeight : window.innerWidth;
-  return sideSize - padding;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const isLandscape = width > height;
+
+  return (isLandscape ? height : width) - 24;
 };
