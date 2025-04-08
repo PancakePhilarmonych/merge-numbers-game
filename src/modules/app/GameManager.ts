@@ -36,7 +36,7 @@ export default class GameManager {
   private resize() {
     const size = getMaxAvailibleSideSize();
 
-    this.app.resize(size);
+    this.app.resize();
     this.grid.resize(size);
     this.startView.resize(size);
     this.restartView.resize(size);

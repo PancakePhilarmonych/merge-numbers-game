@@ -6,6 +6,7 @@ const DEFAULT_GRID_SIZE = 5;
 
 export default class Grid {
   private cells: Cell[][];
+  //TODO: Move game objects from the grid
   public gameObjects: GameObject[];
   public size: number;
 

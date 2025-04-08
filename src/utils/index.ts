@@ -66,5 +66,5 @@ export const getMaxAvailibleSideSize = () => {
   const height = window.innerHeight;
   const isLandscape = width > height;
 
-  return (isLandscape ? height : width) - 24;
+  return isLandscape ? height : width;
 };
