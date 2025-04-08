@@ -277,7 +277,7 @@ export default class GameManager {
     this.selectedObject = null;
 
     this.store.reset();
-    this.grid.generateGameObjects(this.grid.emptyCells);
+    this.grid.generateGameObjects();
     this.app.addToContainer(this.grid.gameObjects);
     this.app.container.eventMode = 'dynamic';
     this.restartView.hide();
