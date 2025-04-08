@@ -24,7 +24,7 @@ export default class GameManager {
     this.restartView = new RestartView();
     this.startView = new StartView();
 
-    this.grid.generateGameObjects(this.grid.emptyCells);
+    this.grid.generateGameObjects();
     this.app.addToContainer(this.grid.gameObjects);
     this.app.addToContainer(this.grid.cellsContainers);
     this.app.addToStage(this.startView.container);

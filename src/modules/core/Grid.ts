@@ -58,8 +58,8 @@ export default class Grid {
     return this.emptyCells[Math.floor(Math.random() * this.emptyCells.length)];
   }
 
-  public generateGameObjects(cells: Cell[]): void {
-    cells.forEach((cell: Cell) => {
+  public generateGameObjects(): void {
+    this.emptyCells.forEach((cell: Cell) => {
       if (this.gameObjects.length >= 18) return;
       const hasGameObject = cell.getGameObject();
 
@@ -75,7 +75,7 @@ export default class Grid {
     });
 
     if (this.gameObjects.length < 18) {
-      this.generateGameObjects(this.emptyCells);
+      this.generateGameObjects();
     }
   }
 
