@@ -281,6 +281,7 @@ export default class GameManager {
 
     this.selectedObject = null;
 
+    this.scorePanel.setScore(0);
     this.store.reset();
     this.grid.generateGameObjects();
     this.app.addToContainer(this.grid.gameObjects);
