@@ -3,6 +3,7 @@ import Grid from '@/modules/core/Grid';
 import Store from '@/modules/app/Store';
 import Cell from '@/modules/core/Cell';
 import { Colors, smoothMoveTo, getRandomColor, getMaxAvailibleSideSize } from '@/utils';
+import ScorePanel from '../ui/ScorePanel';
 import RestartView from '@/modules/ui/RestartView';
 import StartView from '@/modules/ui/StartView';
 import { gsap } from 'gsap';
@@ -11,6 +12,7 @@ import App from '@/modules/app/App';
 export default class GameManager {
   private app: App = new App();
   private store: Store = new Store();
+  private scorePanel: ScorePanel = new ScorePanel();
   private grid = new Grid();
 
   private availibleCells: Cell[] = [];
@@ -28,6 +30,8 @@ export default class GameManager {
     this.app.addToContainer(this.grid.gameObjects);
     this.app.addToContainer(this.grid.cellsContainers);
     this.app.addToStage(this.startView.container);
+    this.scorePanel.y = getMaxAvailibleSideSize();
+    this.app.addToStage(this.scorePanel);
     this.app.addToStage(this.restartView.container);
 
     this.setListeners();
@@ -38,6 +42,7 @@ export default class GameManager {
 
     this.app.resize();
     this.grid.resize(size);
+    this.scorePanel.y = getMaxAvailibleSideSize();
     this.startView.resize(size);
     this.restartView.resize(size);
   }
@@ -288,6 +293,7 @@ export default class GameManager {
   private levelUpObject(object: GameObject): void {
     object.levelUp();
     this.store.incrementScore(object.getLevel());
+    this.scorePanel.setScore(this.store.getScore());
   }
 
   private startGame(): void {
